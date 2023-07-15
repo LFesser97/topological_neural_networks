@@ -316,9 +316,6 @@ def borf3(
 """
 def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, batch_remove=2, 
           device=None, save_dir='rewired_graphs', dataset_name=None, graph_index=0, debug=False):
-    """
-    Rewiring method based on the AFRC.
-    """
     # Check if there is a preprocessed graph
     dirname = f'{save_dir}/{dataset_name}'
     pathlib.Path(dirname).mkdir(parents=True, exist_ok=True)
