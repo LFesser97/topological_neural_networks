@@ -13,7 +13,7 @@ from torch_geometric.utils import (
 )
 from torch_geometric.datasets import TUDataset
 from GraphRicciCurvature.OllivierRicci import OllivierRicci
-from GraphRicciCurvature.FormanRicci import FormanRicci
+# from GraphRicciCurvature.FormanRicci import FormanRicci
 
 class CurvaturePlainGraph():
     def __init__(self, G, device=None):
@@ -313,7 +313,7 @@ def borf3(
 
     return edge_index, edge_type
 
-
+"""
 def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, batch_remove=2, 
           device=None, save_dir='rewired_graphs', dataset_name=None, graph_index=0, debug=False):
     """
@@ -364,3 +364,4 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
         torch.save(edge_type, f)
 
     return edge_index, edge_type
+    """
