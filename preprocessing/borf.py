@@ -13,6 +13,7 @@ from torch_geometric.utils import (
 )
 from torch_geometric.datasets import TUDataset
 from GraphRicciCurvature.OllivierRicci import OllivierRicci
+from GraphRicciCurvature.FormanRicci import FormanRicci
 
 class CurvaturePlainGraph():
     def __init__(self, G, device=None):
@@ -297,6 +298,58 @@ def borf3(
         for (u, v) in most_pos_edges:
             if(G.has_edge(u, v)):
                 G.remove_edge(u, v)
+
+    edge_index = from_networkx(G).edge_index
+    edge_type = torch.zeros(size=(len(G.edges),)).type(torch.LongTensor)
+    # edge_type = torch.tensor(edge_type)
+
+    if(debug) : print(f'[INFO] Saving edge_index to {edge_index_filename}')
+    with open(edge_index_filename, 'wb') as f:
+        torch.save(edge_index, f)
+
+    if(debug) : print(f'[INFO] Saving edge_type to {edge_type_filename}')
+    with open(edge_type_filename, 'wb') as f:
+        torch.save(edge_type, f)
+
+    return edge_index, edge_type
+
+
+def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, batch_remove=2, 
+          device=None, save_dir='rewired_graphs', dataset_name=None, graph_index=0, debug=False):
+    """
+    Rewiring method based on the AFRC.
+    """
+    # Check if there is a preprocessed graph
+    dirname = f'{save_dir}/{dataset_name}'
+    pathlib.Path(dirname).mkdir(parents=True, exist_ok=True)
+    edge_index_filename = os.path.join(dirname, f'iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_index_{graph_index}.pt')
+    edge_type_filename = os.path.join(dirname, f'iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_type_{graph_index}.pt')
+
+    # Preprocess data
+    G, N, edge_type = _preprocess_data(data)
+
+    # Rewiring begins
+    for _ in range(loops):
+        # Compute AFRC
+        afrc = FormanRicci(G)
+        afrc.compute_ricci_curvature()
+        _C = sorted(afrc.G.edges, key=lambda x: afrc.G[x[0]][x[1]]['afrc'])
+
+        # Get top negative and positive curved edges
+        most_pos_edges = _C[-batch_remove:]
+        most_neg_edges = _C[:batch_add]
+
+        # Remove edges
+        for (u, v) in most_pos_edges:
+            if(G.has_edge(u, v)):
+                G.remove_edge(u, v)
+
+        # Add edges
+        for (u, v) in most_neg_edges:
+            # choose a neighbor w of u that is not a neighbor of v
+            # and add an edge between v and w
+            w = np.random.choice(list(set(G.neighbors(u)) - set(G.neighbors(v))))
+            G.add_edge(v, w)
 
     edge_index = from_networkx(G).edge_index
     edge_type = torch.zeros(size=(len(G.edges),)).type(torch.LongTensor)
