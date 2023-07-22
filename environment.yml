@@ -71,7 +71,6 @@ dependencies:
   - zlib=1.2.12=h7f8727e_2
   - zstd=1.5.0=ha95c52a_0
 
-"""
   - pip:
     - attrdict==2.0.1
     - cycler==0.11.0
@@ -90,8 +89,3 @@ dependencies:
     - scikit-learn==1.1.2
     - scipy==1.9.1
     - threadpoolctl==3.1.0
-    - torch-geometric==2.1.0.post1
-    - torch-scatter==2.0.9
-    - torch-sparse==0.6.13
-    - tqdm==4.64.1
-"""
