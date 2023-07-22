@@ -70,6 +70,8 @@ dependencies:
   - xz=5.2.5=h7f8727e_1
   - zlib=1.2.12=h7f8727e_2
   - zstd=1.5.0=ha95c52a_0
+
+"""
   - pip:
     - attrdict==2.0.1
     - cycler==0.11.0
@@ -92,3 +94,4 @@ dependencies:
     - torch-scatter==2.0.9
     - torch-sparse==0.6.13
     - tqdm==4.64.1
+"""
