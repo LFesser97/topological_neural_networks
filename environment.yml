@@ -14,7 +14,7 @@ dependencies:
   - cffi=1.14.6=py39he32792d_0
   - charset-normalizer=2.1.1=pyhd8ed1ab_0
   - cryptography=37.0.2=py39hd97740a_0
-  - cudatoolkit=10.1
+  - cudatoolkit=11.6.0=hecad31d_10
   - ffmpeg=4.3=hf484d3e_0
   - freetype=2.10.4=h0708190_1
   - gmp=6.2.1=h58526e2_0
@@ -53,12 +53,16 @@ dependencies:
   - pysocks=1.7.1=py39hf3d152e_5
   - python=3.9.13=haa1d7c7_1
   - python_abi=3.9=2_cp39
+  - pytorch=1.12.1=py3.9_cuda11.6_cudnn8.3.2_0
+  - pytorch-mutex=1.0=cuda
   - readline=8.1.2=h7f8727e_1
   - requests=2.28.1=pyhd8ed1ab_1
   - setuptools=63.4.1=py39h06a4308_0
   - six=1.16.0=pyh6c4a22f_0
   - sqlite=3.39.2=h5082296_0
   - tk=8.6.12=h1ccaba5_0
+  - torchaudio=0.12.1=py39_cu116
+  - torchvision=0.13.1=py39_cu116
   - typing_extensions=4.3.0=pyha770c72_0
   - tzdata=2022a=hda174b7_0
   - urllib3=1.26.11=pyhd8ed1ab_0
