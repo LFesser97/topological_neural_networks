@@ -11,11 +11,22 @@ import pandas as pd
 from hyperparams import get_args_from_input
 from preprocessing import rewiring, sdrf, fosr, digl, borf
 
-mutag = list(TUDataset(root="data", name="MUTAG"))
-enzymes = list(TUDataset(root="data", name="ENZYMES"))
-proteins = list(TUDataset(root="data", name="PROTEINS"))
-imdb = list(TUDataset(root="data", name="IMDB-BINARY"))
-datasets = {"mutag" : mutag, "enzymes" : enzymes, "imdb": imdb, "proteins": proteins}
+import pickle
+
+#mutag = list(TUDataset(root="data", name="MUTAG"))
+#enzymes = list(TUDataset(root="data", name="ENZYMES"))
+#proteins = list(TUDataset(root="data", name="PROTEINS"))
+#imdb = list(TUDataset(root="data", name="IMDB-BINARY"))
+#datasets = {"mutag" : mutag, "enzymes" : enzymes, "imdb": imdb, "proteins": proteins}
+
+
+# read mutag dataset from mutag.pkl
+with open("mutag.pkl", "rb") as f:
+    mutag = pickle.load(f)
+
+datasets = {"mutag" : mutag}
+
+
 for key in datasets:
     if key in ["reddit", "imdb", "collab"]:
         for graph in datasets[key]:
