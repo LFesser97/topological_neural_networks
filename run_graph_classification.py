@@ -24,16 +24,16 @@ import pickle
 with open("mutag.pkl", "rb") as f:
     mutag = pickle.load(f)
 
-# with open("enzymes.pkl", "rb") as f:
-#    enzymes = pickle.load(f)
+with open("enzymes.pkl", "rb") as f:
+    enzymes = pickle.load(f)
 
-#with open("proteins.pkl", "rb") as f:
-#    proteins = pickle.load(f)
+with open("proteins.pkl", "rb") as f:
+    proteins = pickle.load(f)
 
-#with open("imdb.pkl", "rb") as f:
-#    imdb = pickle.load(f)
+with open("imdb.pkl", "rb") as f:
+    imdb = pickle.load(f)
 
-datasets = {"mutag" : mutag}
+datasets = {"mutag" : mutag, "enzymes" : enzymes, "imdb": imdb, "proteins": proteins}
 
 
 for key in datasets:
