@@ -80,7 +80,7 @@ for key in datasets:
         print(f"[INFO] BORF hyper-parameter : num_iterations = {args.num_iterations}")
         print(f"[INFO] BORF hyper-parameter : batch_add = {args.borf_batch_add}")
         print(f"[INFO] BORF hyper-parameter : num_iterations = {args.borf_batch_remove}")
-        dataset.data.edge_index, dataset.data.edge_type = borf.borf3(dataset.data, 
+        dataset.data.edge_index, dataset.data.edge_type = borf.borf4(dataset.data, 
                 loops=args.num_iterations, 
                 remove_edges=False, 
                 is_undirected=True,
