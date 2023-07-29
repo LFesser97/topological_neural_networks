@@ -164,7 +164,7 @@ class FormanRicci:
             if len(cycle) == 3:
                 self.triangles.append(cycle)
 
-        for edge in list(self.edges()):
+        for edge in list(self.G.edges()):
             u, v = edge
             self.edges[edge]["triangles"] = len([cycle for cycle in self.triangles if u in cycle and v in cycle])/2
 
