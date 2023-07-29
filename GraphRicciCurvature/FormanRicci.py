@@ -4,7 +4,7 @@ import math
 import time
 import torch
 import pandas as pd
-torch.multiprocessing.set_start_method('spawn')
+# torch.multiprocessing.set_start_method('spawn')
 _device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 import multiprocessing as mp
 from functools import lru_cache
