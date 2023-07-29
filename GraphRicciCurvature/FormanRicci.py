@@ -166,7 +166,7 @@ class FormanRicci:
 
         for edge in list(self.G.edges()):
             u, v = edge
-            self.edges[edge]["triangles"] = len([cycle for cycle in self.triangles if u in cycle and v in cycle])/2
+            self.G.edges[edge]["triangles"] = len([cycle for cycle in self.triangles if u in cycle and v in cycle])/2
 
 
         if not nx.get_edge_attributes(self.G, weight):
