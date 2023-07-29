@@ -13,25 +13,24 @@ from preprocessing import rewiring, sdrf, fosr, digl, borf
 
 import pickle
 
-#mutag = list(TUDataset(root="data", name="MUTAG"))
-#enzymes = list(TUDataset(root="data", name="ENZYMES"))
-#proteins = list(TUDataset(root="data", name="PROTEINS"))
-#imdb = list(TUDataset(root="data", name="IMDB-BINARY"))
-#datasets = {"mutag" : mutag, "enzymes" : enzymes, "imdb": imdb, "proteins": proteins}
+mutag = list(TUDataset(root="data", name="MUTAG"))
+enzymes = list(TUDataset(root="data", name="ENZYMES"))
+proteins = list(TUDataset(root="data", name="PROTEINS"))
+imdb = list(TUDataset(root="data", name="IMDB-BINARY"))
 
 
 # read datasets from pickle files
-with open("mutag.pkl", "rb") as f:
-    mutag = pickle.load(f)
+#with open("mutag.pkl", "rb") as f:
+#    mutag = pickle.load(f)
 
-with open("enzymes.pkl", "rb") as f:
-    enzymes = pickle.load(f)
+#with open("enzymes.pkl", "rb") as f:
+#    enzymes = pickle.load(f)
 
-with open("proteins.pkl", "rb") as f:
-    proteins = pickle.load(f)
+#with open("proteins.pkl", "rb") as f:
+#    proteins = pickle.load(f)
 
-with open("imdb.pkl", "rb") as f:
-    imdb = pickle.load(f)
+#with open("imdb.pkl", "rb") as f:
+#    imdb = pickle.load(f)
 
 datasets = {"mutag" : mutag, "enzymes" : enzymes, "imdb": imdb, "proteins": proteins}
 
