@@ -407,6 +407,11 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
 
     print('Number of edges with missing attributes: %d' % problematic_edges)
 
+    # if a node is missing the AFRC attribute, set it to 0
+    for node in G.nodes():
+        if 'AFRC' not in G.nodes[node]:
+            G.nodes[node]['AFRC'] = 0.0
+
     # check again that all nodes have the same attributes
     if G.number_of_nodes() > 0:
         node_attrs = list(next(iter(G.nodes(data=True)))[-1].keys())
