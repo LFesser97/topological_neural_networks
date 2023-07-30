@@ -217,6 +217,13 @@ class FormanRicci:
         # check that all edges have the same attributes
         for edge in self.G.edges():
             if self.G.edges[edge] != edge_attributes:
-                raise ValueError("All edges must have the same attributes.")
+                # get the attributes of the edge that does not match
+                edge_attributes = self.G.edges[edge]
+
+                # get the missing attributes
+                missing_attributes = set(edge_attributes.keys()) - set(self.G.graph.keys())
+
+                # raise an error
+                raise KeyError('Edge attributes do not match graph attributes. Missing attributes: %s' % missing_attributes)
 
         return self.G
