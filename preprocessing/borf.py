@@ -371,21 +371,41 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
     # get all attributes of the edges in the graph
     edge_attributes = G.graph # dictionary of attributes for the graph
 
+    missing_attributes = 0
+
     # check that all edges have the same attributes
     for edge in G.edges():
         if G.edges[edge] != edge_attributes:
+            missing_attributes += 1
+
             # get the attributes of the edge that does not match
             edge_attributes = G.edges[edge]
 
             # get the missing attributes
             missing_attributes = set(edge_attributes.keys()) - set(G.graph.keys())
 
-            # raise an error
-            raise ValueError(
-                "The following attributes are missing from the graph: "
-                + str(missing_attributes)
-            )
+            # set weight to 1 for the edge if weight is missing
+            if 'weight' in missing_attributes:
+                G.edges[edge]['weight'] = 1.0
+                # remove weight from missing attributes
+                missing_attributes.remove('weight')
 
+            # set AFRC to 0 for the edge if AFRC is missing
+            if 'AFRC' in missing_attributes:
+                G.edges[edge]['AFRC'] = 0.0
+                # remove AFRC from missing attributes
+                missing_attributes.remove('AFRC')
+
+            # set triangles to 0 for the edge if triangles is missing
+            if 'triangles' in missing_attributes:
+                G.edges[edge]['triangles'] = 0.0
+                # remove triangles from missing attributes
+                missing_attributes.remove('triangles')
+
+            # assert that all missing attributes have been accounted for
+            assert len(missing_attributes) == 0, 'Missing attributes: %s' % missing_attributes
+
+    print('Number of edges with missing attributes: %d' % missing_attributes)
     edge_index = from_networkx(G).edge_index    
     edge_type = torch.zeros(size=(len(G.edges),)).type(torch.LongTensor)
     # edge_type = torch.tensor(edge_type)
