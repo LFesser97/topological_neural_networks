@@ -226,13 +226,22 @@ class FormanRicci:
                 # set weight to 1 for the edge if weight is missing
                 if 'weight' in missing_attributes:
                     self.G.edges[edge]['weight'] = 1.0
+                    # remove weight from missing attributes
+                    missing_attributes.remove('weight')
 
                 # set AFRC to 0 for the edge if AFRC is missing
                 if 'AFRC' in missing_attributes:
                     self.G.edges[edge]['AFRC'] = 0.0
+                    # remove AFRC from missing attributes
+                    missing_attributes.remove('AFRC')
 
                 # set triangles to 0 for the edge if triangles is missing
                 if 'triangles' in missing_attributes:
                     self.G.edges[edge]['triangles'] = 0.0
+                    # remove triangles from missing attributes
+                    missing_attributes.remove('triangles')
+
+                # assert that all missing attributes have been accounted for
+                assert len(missing_attributes) == 0, 'Missing attributes: %s' % missing_attributes
 
         return self.G
