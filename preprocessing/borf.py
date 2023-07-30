@@ -330,7 +330,7 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
     for _ in range(loops):
         # Compute AFRC
         afrc = FormanRicci(G)
-        afrc.afrc_3()
+        afrc.compute_ricci_curvature()
         _C = sorted(afrc.G.edges, key=lambda x: afrc.G[x[0]][x[1]]['AFRC'])
 
         # Get top negative and positive curved edges
@@ -457,7 +457,7 @@ def borf5(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
     for _ in range(loops):
         # Compute AFRC
         afrc = FormanRicci4(G)
-        afrc.afrc_4()
+        afrc.compute_afrc_4()
         _C = sorted(afrc.G.edges, key=lambda x: afrc.G[x[0]][x[1]]['AFRC_4'])
 
         # Get top negative and positive curved edges

@@ -201,7 +201,7 @@ class FormanRicci:
         return _compute_afrc_edges(self.G, self.weight, edge_list)
     
 
-    def compute_afrc_3(self) -> nx.Graph:
+    def compute_ricci_curvature(self) -> nx.Graph:
         """
         Compute AFRC of edges and nodes.
 
@@ -243,5 +243,6 @@ class FormanRicci:
 
                 # assert that all missing attributes have been accounted for
                 assert len(missing_attributes) == 0, 'Missing attributes: %s' % missing_attributes
+
 
         return self.G

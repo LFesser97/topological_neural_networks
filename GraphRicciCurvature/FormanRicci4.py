@@ -126,7 +126,7 @@ def _compute_afrc(G: nx.Graph, weight: str="weight") -> nx.Graph:
 
     Returns
     -------
-    G : A NetworkX graph with "AFRC" on edges and nodes.
+    G : A NetworkX graph with "AFRC_4" on edges and nodes.
     """
     # Compute AFRC for all edges
     edge_afrc = _compute_afrc_edges(G, weight=weight)
