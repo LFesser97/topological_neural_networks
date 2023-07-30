@@ -408,12 +408,13 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
     print('Number of edges with missing attributes: %d' % problematic_edges)
 
     # check again that all edges have the same attributes
-    for edge in G.edges():
-        if G.edges[edge] != edge_attributes:
-            print('Edge attributes: %s' % G.edges[edge])
-            print('Graph attributes: %s' % edge_attributes)
-            G.remove_edge(edge[0], edge[1])
-            print('Removed edge: %s' % str(edge))
+    if G.number_of_edges() > 0:
+        edge_attrs = list(next(iter(G.edges(data=True)))[-1].keys())
+
+    for i, (_, _, feat_dict) in enumerate(G.edges(data=True)):
+        if set(feat_dict.keys()) != set(edge_attrs):
+            # raise an error and print the missing attributes
+            raise ValueError('The following attributes are missing for edge %s: %s' % (i, set(edge_attrs) - set(feat_dict.keys())))
 
     edge_index = from_networkx(G).edge_index    
     edge_type = torch.zeros(size=(len(G.edges),)).type(torch.LongTensor)
