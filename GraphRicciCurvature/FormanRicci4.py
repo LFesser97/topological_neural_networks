@@ -254,6 +254,12 @@ class FormanRicci4:
                     # remove quadrangles from missing attributes
                     missing_attributes.remove('quadrangles')
 
+                # set AFRC to 0 for the edge if AFRC is missing
+                if 'AFRC' in missing_attributes:
+                    self.G.edges[edge]['AFRC'] = 0.0
+                    # remove AFRC from missing attributes
+                    missing_attributes.remove('AFRC')                
+
                 # assert that all missing attributes have been accounted for
                 assert len(missing_attributes) == 0, 'Missing attributes: %s' % missing_attributes
 
