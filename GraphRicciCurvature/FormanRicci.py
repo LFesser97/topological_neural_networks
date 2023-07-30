@@ -211,10 +211,12 @@ class FormanRicci:
         """
         self.G = _compute_afrc(self.G, self.weight)
 
-        # check that all edges have AFRC
+        # get all attributes of the edges in the graph
+        edge_attributes = self.G.graph # dictionary of attributes for the graph
+
+        # check that all edges have the same attributes
         for edge in self.G.edges():
-            if not self.G.edges[edge]["AFRC"]:
-                # set AFRC to 0 if not found
-                self.G.edges[edge]["AFRC"] = 0
+            if self.G.edges[edge] != edge_attributes:
+                raise ValueError("All edges must have the same attributes.")
 
         return self.G
