@@ -414,7 +414,8 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
     for i, (_, feat_dict) in enumerate(G.nodes(data=True)):
         if set(feat_dict.keys()) != set(node_attrs):
             # raise an error and print the missing attributes
-            raise ValueError('Node %d is missing attributes %s' % (i, set(node_attrs) - set(feat_dict.keys())))
+            missing_node_attributes = set(node_attrs) - set(feat_dict.keys())
+            raise ValueError('Node %d is missing attributes %s' % (i, missing_node_attributes))
 
 
     edge_index = from_networkx(G).edge_index    
