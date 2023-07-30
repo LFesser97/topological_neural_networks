@@ -481,6 +481,7 @@ def borf5(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
                 G[v][w]["triangles"] = 0
                 G[v][w]["weight"] = 1.0
                 G[v][w]["AFRC_4"] = 0.0
+                G[v][w]["quadrangles"] = 0
 
             # else if there is a neighbor w of v that is not a neighbor of u,
             # choose w at random add an edge between u and w
@@ -492,6 +493,7 @@ def borf5(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
                 G[u][w]["triangles"] = 0
                 G[u][w]["weight"] = 1.0
                 G[u][w]["AFRC_4"] = 0.0
+                G[u][w]["quadrangles"] = 0
 
             # else if all neighbors of u are neighbors of v, and vice versa,
             # do nothing
