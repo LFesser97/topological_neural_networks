@@ -223,7 +223,16 @@ class FormanRicci:
                 # get the missing attributes
                 missing_attributes = set(edge_attributes.keys()) - set(self.G.graph.keys())
 
-                # raise an error
-                raise KeyError('Edge attributes do not match graph attributes. Missing attributes: %s' % missing_attributes)
+                # set weight to 1 for the edge if weight is missing
+                if 'weight' in missing_attributes:
+                    self.G.edges[edge]['weight'] = 1.0
+
+                # set AFRC to 0 for the edge if AFRC is missing
+                if 'AFRC' in missing_attributes:
+                    self.G.edges[edge]['AFRC'] = 0.0
+
+                # set triangles to 0 for the edge if triangles is missing
+                if 'triangles' in missing_attributes:
+                    self.G.edges[edge]['triangles'] = 0.0
 
         return self.G
