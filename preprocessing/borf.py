@@ -343,14 +343,30 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
 
         # Add edges
         for (u, v) in most_neg_edges:
-            # choose a neighbor w of u that is not a neighbor of v
-            # and add an edge between v and w
-            w = np.random.choice(list(set(G.neighbors(u)) - set(G.neighbors(v))))
-            G.add_edge(v, w)
-            # add attributes "AFRC", "triangles", and "weight" to each added edge
-            G[v][w]["AFRC"] = 0.0
-            G[v][w]["triangles"] = 0
-            G[v][w]["weight"] = 1.0
+            # if there is a neighbor w of u that is not a neighbor of v,
+            # choose w at random add an edge between v and w
+            if list(set(G.neighbors(u)) - set(G.neighbors(v))) != []:
+                w = np.random.choice(list(set(G.neighbors(u)) - set(G.neighbors(v))))
+                G.add_edge(v, w)
+                # add attributes "AFRC", "triangles", and "weight" to each added edge
+                G[v][w]["AFRC"] = 0.0
+                G[v][w]["triangles"] = 0
+                G[v][w]["weight"] = 1.0
+
+            # else if there is a neighbor w of v that is not a neighbor of u,
+            # choose w at random add an edge between u and w
+            elif list(set(G.neighbors(v)) - set(G.neighbors(u))) != []:
+                w = np.random.choice(list(set(G.neighbors(v)) - set(G.neighbors(u))))
+                G.add_edge(u, w)
+                # add attributes "AFRC", "triangles", and "weight" to each added edge
+                G[u][w]["AFRC"] = 0.0
+                G[u][w]["triangles"] = 0
+                G[u][w]["weight"] = 1.0
+
+            # else if all neighbors of u are neighbors of v, and vice versa,
+            # do nothing
+            else:
+                pass
 
     edge_index = from_networkx(G).edge_index
     edge_type = torch.zeros(size=(len(G.edges),)).type(torch.LongTensor)
