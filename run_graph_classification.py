@@ -127,7 +127,35 @@ for key in datasets:
             print(f"[INFO] BORF hyper-parameter : batch_add = {args.borf_batch_add}")
             print(f"[INFO] BORF hyper-parameter : batch_remove = {args.borf_batch_remove}")
             for i in range(len(dataset)):
+                dataset[i].edge_index, dataset[i].edge_type = borf.borf3(dataset[i], 
+                        loops=args.num_iterations, 
+                        remove_edges=False, 
+                        is_undirected=True,
+                        batch_add=args.borf_batch_add,
+                        batch_remove=args.borf_batch_remove,
+                        dataset_name=key,
+                        graph_index=i)
+                pbar.update(1)
+        elif args.rewiring == "barf_3":
+            print(f"[INFO] BORF hyper-parameter : num_iterations = {args.num_iterations}")
+            print(f"[INFO] BORF hyper-parameter : batch_add = {args.borf_batch_add}")
+            print(f"[INFO] BORF hyper-parameter : batch_remove = {args.borf_batch_remove}")
+            for i in range(len(dataset)):
                 dataset[i].edge_index, dataset[i].edge_type = borf.borf4(dataset[i], 
+                        loops=args.num_iterations, 
+                        remove_edges=False, 
+                        is_undirected=True,
+                        batch_add=args.borf_batch_add,
+                        batch_remove=args.borf_batch_remove,
+                        dataset_name=key,
+                        graph_index=i)
+                pbar.update(1)
+        elif args.rewiring == "barf_4":
+            print(f"[INFO] BORF hyper-parameter : num_iterations = {args.num_iterations}")
+            print(f"[INFO] BORF hyper-parameter : batch_add = {args.borf_batch_add}")
+            print(f"[INFO] BORF hyper-parameter : batch_remove = {args.borf_batch_remove}")
+            for i in range(len(dataset)):
+                dataset[i].edge_index, dataset[i].edge_type = borf.borf5(dataset[i], 
                         loops=args.num_iterations, 
                         remove_edges=False, 
                         is_undirected=True,

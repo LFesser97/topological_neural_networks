@@ -14,6 +14,7 @@ from torch_geometric.utils import (
 from torch_geometric.datasets import TUDataset
 from GraphRicciCurvature.OllivierRicci import OllivierRicci
 from GraphRicciCurvature.FormanRicci import FormanRicci
+from GraphRicciCurvature.FormanRicci4 import FormanRicci4
 
 class CurvaturePlainGraph():
     def __init__(self, G, device=None):
@@ -329,7 +330,7 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
     for _ in range(loops):
         # Compute AFRC
         afrc = FormanRicci(G)
-        afrc.compute_ricci_curvature()
+        afrc.afrc_3()
         _C = sorted(afrc.G.edges, key=lambda x: afrc.G[x[0]][x[1]]['AFRC'])
 
         # Get top negative and positive curved edges
@@ -411,6 +412,147 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
     for node in G.nodes():
         if 'AFRC' not in G.nodes[node]:
             G.nodes[node]['AFRC'] = 0.0
+
+    # check again that all nodes have the same attributes
+    if G.number_of_nodes() > 0:
+        node_attrs = list(next(iter(G.nodes(data=True)))[-1].keys())
+
+    for i, (_, feat_dict) in enumerate(G.nodes(data=True)):
+        if set(feat_dict.keys()) != set(node_attrs):
+            # raise an error and print the missing attributes
+            if set(node_attrs) - set(feat_dict.keys()) != set():
+                missing_node_attributes = set(node_attrs) - set(feat_dict.keys())
+            else:
+                missing_node_attributes = set(feat_dict.keys()) - set(node_attrs)
+            raise ValueError('Node %d is missing attributes %s' % (i, missing_node_attributes))
+
+
+    edge_index = from_networkx(G).edge_index    
+    edge_type = torch.zeros(size=(len(G.edges),)).type(torch.LongTensor)
+    # edge_type = torch.tensor(edge_type)
+
+    if(debug) : print(f'[INFO] Saving edge_index to {edge_index_filename}')
+    with open(edge_index_filename, 'wb') as f:
+        torch.save(edge_index, f)
+
+    if(debug) : print(f'[INFO] Saving edge_type to {edge_type_filename}')
+    with open(edge_type_filename, 'wb') as f:
+        torch.save(edge_type, f)
+
+    return edge_index, edge_type
+
+
+def borf5(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, batch_remove=2, 
+          device=None, save_dir='rewired_graphs', dataset_name=None, graph_index=0, debug=False):
+    # Check if there is a preprocessed graph
+    dirname = f'{save_dir}/{dataset_name}'
+    pathlib.Path(dirname).mkdir(parents=True, exist_ok=True)
+    edge_index_filename = os.path.join(dirname, f'iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_index_{graph_index}.pt')
+    edge_type_filename = os.path.join(dirname, f'iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_type_{graph_index}.pt')
+
+    # Preprocess data
+    G, N, edge_type = _preprocess_data(data)
+
+    # Rewiring begins
+    for _ in range(loops):
+        # Compute AFRC
+        afrc = FormanRicci4(G)
+        afrc.afrc_4()
+        _C = sorted(afrc.G.edges, key=lambda x: afrc.G[x[0]][x[1]]['AFRC_4'])
+
+        # Get top negative and positive curved edges
+        most_pos_edges = _C[-batch_remove:]
+        most_neg_edges = _C[:batch_add]
+
+        # Remove edges
+        for (u, v) in most_pos_edges:
+            if(G.has_edge(u, v)):
+                G.remove_edge(u, v)
+
+        # Add edges
+        for (u, v) in most_neg_edges:
+            # if there is a neighbor w of u that is not a neighbor of v,
+            # choose w at random add an edge between v and w
+            if list(set(G.neighbors(u)) - set(G.neighbors(v))) != []:
+                w = np.random.choice(list(set(G.neighbors(u)) - set(G.neighbors(v))))
+                G.add_edge(v, w)
+                # add attributes "AFRC", "triangles", and "weight" to each added edge
+                G[v][w]["AFRC"] = 0.0
+                G[v][w]["triangles"] = 0
+                G[v][w]["weight"] = 1.0
+                G[v][w]["AFRC_4"] = 0.0
+
+            # else if there is a neighbor w of v that is not a neighbor of u,
+            # choose w at random add an edge between u and w
+            elif list(set(G.neighbors(v)) - set(G.neighbors(u))) != []:
+                w = np.random.choice(list(set(G.neighbors(v)) - set(G.neighbors(u))))
+                G.add_edge(u, w)
+                # add attributes "AFRC", "triangles", and "weight" to each added edge
+                G[u][w]["AFRC"] = 0.0
+                G[u][w]["triangles"] = 0
+                G[u][w]["weight"] = 1.0
+                G[u][w]["AFRC_4"] = 0.0
+
+            # else if all neighbors of u are neighbors of v, and vice versa,
+            # do nothing
+            else:
+                pass
+
+    # get all attributes of the edges in the graph
+    edge_attributes = G.graph # dictionary of attributes for the graph
+
+    problematic_edges = 0
+
+    # check that all edges have the same attributes
+    for edge in G.edges():
+        if G.edges[edge] != edge_attributes:
+            problematic_edges += 1
+
+            # get the attributes of the edge that does not match
+            edge_attributes = G.edges[edge]
+
+            # get the missing attributes
+            missing_attributes = set(edge_attributes.keys()) - set(G.graph.keys())
+
+            # set weight to 1 for the edge if weight is missing
+            if 'weight' in missing_attributes:
+                G.edges[edge]['weight'] = 1.0
+                # remove weight from missing attributes
+                missing_attributes.remove('weight')
+
+            # set AFRC to 0 for the edge if AFRC is missing
+            if 'AFRC' in missing_attributes:
+                G.edges[edge]['AFRC'] = 0.0
+                # remove AFRC from missing attributes
+                missing_attributes.remove('AFRC')
+
+            # set triangles to 0 for the edge if triangles is missing
+            if 'triangles' in missing_attributes:
+                G.edges[edge]['triangles'] = 0.0
+                # remove triangles from missing attributes
+                missing_attributes.remove('triangles')
+
+            # set AFRC_4 to 0 for the edge if AFRC_4 is missing
+            if 'AFRC_4' in missing_attributes:
+                G.edges[edge]['AFRC_4'] = 0.0
+                # remove AFRC_4 from missing attributes
+                missing_attributes.remove('AFRC_4')
+
+            # set quadrangles to 0 for the edge if quadrangles is missing
+            if 'quadrangles' in missing_attributes:
+                G.edges[edge]['quadrangles'] = 0.0
+                # remove quadrangles from missing attributes
+                missing_attributes.remove('quadrangles')
+
+            # assert that all missing attributes have been accounted for
+            assert len(missing_attributes) == 0, 'Missing attributes: %s' % missing_attributes
+
+    print('Number of edges with missing attributes: %d' % problematic_edges)
+
+    # if a node is missing the AFRC attribute, set it to 0
+    for node in G.nodes():
+        if 'AFRC_4' not in G.nodes[node]:
+            G.nodes[node]['AFRC_4'] = 0.0
 
     # check again that all nodes have the same attributes
     if G.number_of_nodes() > 0:

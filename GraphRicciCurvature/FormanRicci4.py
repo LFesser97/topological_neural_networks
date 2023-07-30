@@ -4,7 +4,6 @@ import math
 import time
 import torch
 import pandas as pd
-# torch.multiprocessing.set_start_method('spawn')
 _device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 import multiprocessing as mp
 from functools import lru_cache
@@ -17,7 +16,7 @@ import ot
 from .util import logger
 
 
-def _compute_afrc_edge(G: nx.Graph, ni: int, nj: int, t_num: int) -> float:
+def _compute_afrc_edge(G: nx.Graph, ni: int, nj: int, t_num: int, q_num: int) -> float:
     """
     Computes the Augmented Forman-Ricci curvature of a given edge
 
@@ -29,13 +28,15 @@ def _compute_afrc_edge(G: nx.Graph, ni: int, nj: int, t_num: int) -> float:
 
     nj: node j
 
-    m: number of triangles containing the edge between node i and j
+    t_num: number of triangles containing the edge between node i and j
+
+    q_num: number of 4-cycles containing the edge between node i and j
 
     Returns
     -------
     afrc : AFRC of the edge connecting nodes i and j
     """
-    afrc = 4 - G.degree(ni) - G.degree(nj) + 3 * t_num
+    afrc = 4 - G.degree(ni) - G.degree(nj) + 3 * t_num + 2 * q_num
     return afrc
 
 
@@ -62,12 +63,13 @@ def _compute_afrc_edges(G: nx.Graph, weight="weight", edge_list=[]) -> dict:
     edge_afrc = {}
     for edge in edge_list:
         num_triangles = G.edges[edge]["triangles"]
-        edge_afrc[edge] = _compute_afrc_edge(G, edge[0], edge[1], num_triangles)
+        num_quadrangles = G.edges[edge]["quadrangles"]
+        edge_afrc[edge] = _compute_afrc_edge(G, edge[0], edge[1], num_triangles, num_quadrangles)
 
     return edge_afrc
 
 
-def _simple_cycles(G: nx.Graph, limit: int = 3):
+def _simple_cycles(G: nx.Graph, limit: int = 5):
     """
     Find simple cycles (elementary circuits) of a graph up to a given length.
 
@@ -130,23 +132,23 @@ def _compute_afrc(G: nx.Graph, weight: str="weight") -> nx.Graph:
     edge_afrc = _compute_afrc_edges(G, weight=weight)
 
     # Assign edge AFRC from result to graph G
-    nx.set_edge_attributes(G, edge_afrc, "AFRC")
+    nx.set_edge_attributes(G, edge_afrc, "AFRC_4")
 
     # Compute node AFRC
     for n in G.nodes():
         afrc_sum = 0
         if G.degree(n) > 1:
             for nbr in G.neighbors(n):
-                if 'afrc' in G[n][nbr]:
-                    afrc_sum += G[n][nbr]['afrc']
+                if 'afrc_4' in G[n][nbr]:
+                    afrc_sum += G[n][nbr]['afrc_4']
 
             # Assign the node AFRC to be the average of its incident edges
-            G.nodes[n]["AFRC"] = afrc_sum / G.degree(n)
+            G.nodes[n]["AFRC_4"] = afrc_sum / G.degree(n)
 
     return G 
 
 
-class FormanRicci:
+class FormanRicci4:
     """
     A class to compute Forman-Ricci curvature for a given NetworkX graph.
     """
@@ -157,16 +159,21 @@ class FormanRicci:
         """
         self.G = G
         self.weight = weight
-        self.triangles = []     
+        self.triangles = []
+        self.quadrangles = []
 
         # Compute triangles
-        for cycle in _simple_cycles(self.G.to_directed(), 4): # Only compute 2 and 3 cycles
+        for cycle in _simple_cycles(self.G.to_directed(), 5): # Only compute 3 and 4 cycles
             if len(cycle) == 3:
                 self.triangles.append(cycle)
+
+            elif len(cycle) == 4:
+                self.quadrangles.append(cycle)
 
         for edge in list(self.G.edges()):
             u, v = edge
             self.G.edges[edge]["triangles"] = len([cycle for cycle in self.triangles if u in cycle and v in cycle])/2
+            self.G.edges[edge]["quadrangles"] = len([cycle for cycle in self.quadrangles if u in cycle and v in cycle])/2
 
 
         if not nx.get_edge_attributes(self.G, weight):
@@ -201,13 +208,13 @@ class FormanRicci:
         return _compute_afrc_edges(self.G, self.weight, edge_list)
     
 
-    def compute_afrc_3(self) -> nx.Graph:
+    def compute_afrc_4(self) -> nx.Graph:
         """
         Compute AFRC of edges and nodes.
 
         Returns
         -------
-        G : A NetworkX graph with "AFRC" on nodes and edges.
+        G : A NetworkX graph with "AFRC_4" on nodes and edges.
         """
         self.G = _compute_afrc(self.G, self.weight)
 
@@ -230,16 +237,22 @@ class FormanRicci:
                     missing_attributes.remove('weight')
 
                 # set AFRC to 0 for the edge if AFRC is missing
-                if 'AFRC' in missing_attributes:
-                    self.G.edges[edge]['AFRC'] = 0.0
+                if 'AFRC_4' in missing_attributes:
+                    self.G.edges[edge]['AFRC_4'] = 0.0
                     # remove AFRC from missing attributes
-                    missing_attributes.remove('AFRC')
+                    missing_attributes.remove('AFRC_4')
 
                 # set triangles to 0 for the edge if triangles is missing
                 if 'triangles' in missing_attributes:
                     self.G.edges[edge]['triangles'] = 0.0
                     # remove triangles from missing attributes
                     missing_attributes.remove('triangles')
+
+                # set quadrangles to 0 for the edge if quadrangles is missing
+                if 'quadrangles' in missing_attributes:
+                    self.G.edges[edge]['quadrangles'] = 0.0
+                    # remove quadrangles from missing attributes
+                    missing_attributes.remove('quadrangles')
 
                 # assert that all missing attributes have been accounted for
                 assert len(missing_attributes) == 0, 'Missing attributes: %s' % missing_attributes
