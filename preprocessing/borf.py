@@ -371,12 +371,12 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
     # get all attributes of the edges in the graph
     edge_attributes = G.graph # dictionary of attributes for the graph
 
-    missing_attributes = 0
+    problematic_edges = 0
 
     # check that all edges have the same attributes
     for edge in G.edges():
         if G.edges[edge] != edge_attributes:
-            missing_attributes += 1
+            problematic_edges += 1
 
             # get the attributes of the edge that does not match
             edge_attributes = G.edges[edge]
@@ -405,7 +405,7 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
             # assert that all missing attributes have been accounted for
             assert len(missing_attributes) == 0, 'Missing attributes: %s' % missing_attributes
 
-    print('Number of edges with missing attributes: %d' % missing_attributes)
+    print('Number of edges with missing attributes: %d' % problematic_edges)
     edge_index = from_networkx(G).edge_index    
     edge_type = torch.zeros(size=(len(G.edges),)).type(torch.LongTensor)
     # edge_type = torch.tensor(edge_type)
