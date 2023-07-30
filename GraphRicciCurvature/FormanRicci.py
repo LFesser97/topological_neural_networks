@@ -211,4 +211,10 @@ class FormanRicci:
         """
         self.G = _compute_afrc(self.G, self.weight)
 
+        # check that all edges have AFRC
+        for edge in self.G.edges():
+            if not self.G.edges[edge]["AFRC"]:
+                # set AFRC to 0 if not found
+                self.G.edges[edge]["AFRC"] = 0
+
         return self.G
