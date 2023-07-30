@@ -347,6 +347,10 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
             # and add an edge between v and w
             w = np.random.choice(list(set(G.neighbors(u)) - set(G.neighbors(v))))
             G.add_edge(v, w)
+            # add attributes "AFRC", "triangles", and "weight" to each added edge
+            G[v][w]["AFRC"] = 0.0
+            G[v][w]["triangles"] = 0
+            G[v][w]["weight"] = 1.0
 
     edge_index = from_networkx(G).edge_index
     edge_type = torch.zeros(size=(len(G.edges),)).type(torch.LongTensor)
