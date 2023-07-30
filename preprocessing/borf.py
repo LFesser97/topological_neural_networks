@@ -549,10 +549,24 @@ def borf5(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
 
     print('Number of edges with missing attributes: %d' % problematic_edges)
 
-    # if a node is missing the AFRC attribute, set it to 0
+
+
+    # if a node is missing the AFRC_4 attribute, set it to 0
     for node in G.nodes():
         if 'AFRC_4' not in G.nodes[node]:
             G.nodes[node]['AFRC_4'] = 0.0
+
+    # check again that all edges have the same attributes
+    if G.number_of_edges() > 0:
+        edge_attrs = list(next(iter(G.edges(data=True)))[-1].keys())
+
+    for i, (_, _, feat_dict) in enumerate(G.edges(data=True)):
+        if set(feat_dict.keys()) != set(edge_attrs):
+            if set(edge_attrs) - set(feat_dict.keys()) != set():
+                missing_edge_attributes = set(edge_attrs) - set(feat_dict.keys())
+            else:
+                missing_edge_attributes = set(feat_dict.keys()) - set(edge_attrs)
+            raise ValueError('Edge %d is missing attributes %s' % (i, missing_edge_attributes))
 
     # check again that all nodes have the same attributes
     if G.number_of_nodes() > 0:
