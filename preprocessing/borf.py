@@ -556,6 +556,11 @@ def borf5(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
         if 'AFRC_4' not in G.nodes[node]:
             G.nodes[node]['AFRC_4'] = 0.0
 
+    # if an edge is missing the AFRC attribute, set it to 0
+    for edge in G.edges():
+        if 'AFRC' not in G.edges[edge]:
+            G.edges[edge]['AFRC'] = 0.0
+
     # check again that all edges have the same attributes
     if G.number_of_edges() > 0:
         edge_attrs = list(next(iter(G.edges(data=True)))[-1].keys())
