@@ -32,9 +32,7 @@ imdb = list(TUDataset(root="data", name="IMDB-BINARY"))
 #with open("imdb.pkl", "rb") as f:
 #    imdb = pickle.load(f)
 
-# datasets = {"mutag": mutag, "enzymes" : enzymes, "imdb": imdb, "proteins": proteins}
-
-datasets = {"imdb": imdb, "proteins": proteins}
+datasets = {"mutag": mutag, "enzymes" : enzymes, "imdb": imdb, "proteins": proteins}
 
 for key in datasets:
     if key in ["reddit", "imdb", "collab"]:
@@ -174,6 +172,7 @@ for key in datasets:
     end = time.time()
     rewiring_duration = end - start
 
+    """
     #spectral_gap = average_spectral_gap(dataset)
     print('TRAINING STARTED...')
     start = time.time()
@@ -224,3 +223,4 @@ for key in datasets:
     df = pd.DataFrame(results)
     with open(f'results/graph_classification_{args.layer_type}_{args.rewiring}.csv', 'a') as f:
         df.to_csv(f, mode='a', header=f.tell()==0)
+    """
