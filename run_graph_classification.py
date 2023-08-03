@@ -34,7 +34,8 @@ imdb = list(TUDataset(root="data", name="IMDB-BINARY"))
 
 # datasets = {"mutag": mutag, "enzymes" : enzymes, "imdb": imdb, "proteins": proteins}
 
-datasets = {"mutag": mutag}
+datasets = {"mutag": mutag, "proteins": proteins}
+
 
 for key in datasets:
     if key in ["reddit", "imdb", "collab"]:
@@ -59,7 +60,7 @@ def log_to_file(message, filename="results/graph_classification.txt"):
 
 default_args = AttrDict({
     "dropout": 0.5,
-    "num_layers": 5,
+    "num_layers": 4,
     "hidden_dim": 64,
     "learning_rate": 1e-3,
     "layer_type": "R-GCN",
