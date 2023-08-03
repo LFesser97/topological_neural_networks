@@ -243,7 +243,6 @@ def brf2(
     return from_networkx(G).edge_index, torch.tensor(edge_type)
 
 
-"""
 # original borf method
 
 def borf3(
@@ -316,8 +315,8 @@ def borf3(
         torch.save(edge_type, f)
 
     return edge_index, edge_type
-"""
 
+"""
 def borf3(
     data,
     loops=10,
@@ -390,6 +389,7 @@ def borf3(
         torch.save(edge_type, f)
 
     return edge_index, edge_type
+    """
 
 
 
