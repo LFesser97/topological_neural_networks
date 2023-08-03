@@ -32,9 +32,9 @@ imdb = list(TUDataset(root="data", name="IMDB-BINARY"))
 #with open("imdb.pkl", "rb") as f:
 #    imdb = pickle.load(f)
 
-datasets = {"proteins": proteins}
+# datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
 
-# datasets = {"mutag": mutag}
+datasets = {"mutag": mutag}
 
 
 for key in datasets:
