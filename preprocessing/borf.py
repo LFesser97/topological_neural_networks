@@ -242,7 +242,7 @@ def brf2(
                 G.remove_edge(u, v)
     return from_networkx(G).edge_index, torch.tensor(edge_type)
 
-
+"""
 # original borf method
 
 def borf3(
@@ -315,8 +315,9 @@ def borf3(
         torch.save(edge_type, f)
 
     return edge_index, edge_type
+    """
 
-"""
+
 def borf3(
     data,
     loops=10,
@@ -350,7 +351,8 @@ def borf3(
     G, N, edge_type = _preprocess_data(data)
 
     # Rewiring begins
-    for _ in range(loops):
+    num_batches = 0
+    while True:
         # Compute ORC
         orc = OllivierRicci(G, alpha=0)
         orc.compute_ricci_curvature()
@@ -362,19 +364,26 @@ def borf3(
         # get all edges with negative curvature
         most_neg_edges = [edge for edge in _C if orc.G[edge[0]][edge[1]]['ricciCurvature']['rc_curvature'] < 0]
 
-        # Add edges
-        for (u, v) in most_neg_edges:
-            pi = orc.G[u][v]['ricciCurvature']['rc_transport_cost']
-            p, q = np.unravel_index(pi.values.argmax(), pi.values.shape)
-            p, q = pi.index[p], pi.columns[q]
-            
-            if(p != q and not G.has_edge(p, q)):
-                G.add_edge(p, q)
+        if most_neg_edges == []:
+            break
 
-        # Remove edges
-        for (u, v) in most_pos_edges:
-            if(G.has_edge(u, v)):
-                G.remove_edge(u, v)
+        else:
+            # Add edges
+            for (u, v) in most_neg_edges:
+                pi = orc.G[u][v]['ricciCurvature']['rc_transport_cost']
+                p, q = np.unravel_index(pi.values.argmax(), pi.values.shape)
+                p, q = pi.index[p], pi.columns[q]
+                
+                if(p != q and not G.has_edge(p, q)):
+                    G.add_edge(p, q)
+
+            # Remove edges
+            for (u, v) in most_pos_edges:
+                if(G.has_edge(u, v)):
+                    G.remove_edge(u, v)
+
+            num_batches += 1
+            print("Completed batch %d" % num_batches)
 
     edge_index = from_networkx(G).edge_index
     edge_type = torch.zeros(size=(len(G.edges),)).type(torch.LongTensor)
@@ -389,7 +398,7 @@ def borf3(
         torch.save(edge_type, f)
 
     return edge_index, edge_type
-    """
+    
 
 
 
