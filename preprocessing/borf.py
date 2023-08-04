@@ -12,6 +12,10 @@ from torch_geometric.utils import (
     from_networkx,
 )
 from torch_geometric.datasets import TUDataset
+
+import sklearn
+from sklearn.mixture import GaussianMixture
+
 from GraphRicciCurvature.OllivierRicci import OllivierRicci
 from GraphRicciCurvature.FormanRicci import FormanRicci
 from GraphRicciCurvature.FormanRicci4 import FormanRicci4
@@ -201,6 +205,28 @@ def _calculate_improvement(graph, C, x, y, x_neighbors, y_neighbors, k, l):
     graph.remove_edge(k, l)
 
     return new_curvature, old_curvature
+
+def _find_threshold(curv_vals: np.ndarray) -> float:
+    """
+    Model the curvature distribution with a mixture of two Gaussians.
+    Find the midpoint between the means of the two Gaussians.
+    """
+    # fit a mixture of two Gaussians to the curvature values
+    # using GaussianMixture.fit() from sklearn.mixture
+    gmm = GaussianMixture(n_components=2, random_state=0).fit(curv_vals)
+
+    # get the mean and standard deviations of the first Gaussian
+    mean1 = gmm.means_[0][0]
+    std1 = np.sqrt(gmm.covariances_[0][0][0])
+
+    # get the mean and standard deviations of the second Gaussian
+    mean2 = gmm.means_[1][0]
+    std2 = np.sqrt(gmm.covariances_[1][0][0])
+
+    # compute the threshold as the weighted mean of the two means
+    threshold = (mean1 * std1 + mean2 * std2) / (std1 + std2)
+
+    return threshold
 
 def brf2(
     data,
@@ -400,8 +426,6 @@ def borf3(
     return edge_index, edge_type
     
 
-
-
 def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, batch_remove=2, 
           device=None, save_dir='rewired_graphs', dataset_name=None, graph_index=0, debug=False):
     # Check if there is a preprocessed graph
@@ -420,9 +444,16 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
         afrc.compute_ricci_curvature()
         _C = sorted(afrc.G.edges, key=lambda x: afrc.G[x[0]][x[1]]['AFRC'])
 
+        # convert _C to a numpy array
+        curv_vals = np.array(_C)
+
+        # find the threshold
+        threshold = _find_threshold(curv_vals)
+
         # Get top negative and positive curved edges
         most_pos_edges = _C[-batch_remove:]
-        most_neg_edges = _C[:batch_add]
+        # most_neg_edges = _C[:batch_add]
+        most_neg_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC'] < threshold]
 
         # Remove edges
         for (u, v) in most_pos_edges:
