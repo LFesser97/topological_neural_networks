@@ -449,6 +449,7 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
 
         # find the threshold
         threshold = _find_threshold(curv_vals)
+        print('Threshold: %f' % threshold)
 
         # Get top negative and positive curved edges
         most_pos_edges = _C[-batch_remove:]
@@ -524,7 +525,7 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
             # assert that all missing attributes have been accounted for
             assert len(missing_attributes) == 0, 'Missing attributes: %s' % missing_attributes
 
-    print('Number of edges with missing attributes: %d' % problematic_edges)
+    # print('Number of edges with missing attributes: %d' % problematic_edges)
 
     # if a node is missing the AFRC attribute, set it to 0
     for node in G.nodes():
