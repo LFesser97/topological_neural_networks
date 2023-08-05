@@ -377,7 +377,6 @@ def borf3(
     G, N, edge_type = _preprocess_data(data)
 
     # Rewiring begins
-    num_batches = 0
     for _ in range(loops):
         # Compute ORC
         orc = OllivierRicci(G, alpha=0)
@@ -404,8 +403,6 @@ def borf3(
             if(G.has_edge(u, v)):
                 G.remove_edge(u, v)
 
-        num_batches += 1
-        print("Completed batch %d" % num_batches)
 
     edge_index = from_networkx(G).edge_index
     edge_type = torch.zeros(size=(len(G.edges),)).type(torch.LongTensor)
