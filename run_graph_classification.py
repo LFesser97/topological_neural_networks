@@ -34,7 +34,7 @@ imdb = list(TUDataset(root="data", name="IMDB-BINARY"))
 
 # datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
 
-datasets = {"mutag": mutag}
+datasets = {"enzymes": enzymes}
 
 
 for key in datasets:
