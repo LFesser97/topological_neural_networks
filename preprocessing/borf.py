@@ -432,54 +432,59 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
 
     # Rewiring begins
     for _ in range(loops):
-        # Compute AFRC
-        afrc = FormanRicci(G)
-        afrc.compute_ricci_curvature()
-        _C = sorted(afrc.G.edges, key=lambda x: afrc.G[x[0]][x[1]]['AFRC'])
+        try:
+            # Compute AFRC
+            afrc = FormanRicci(G)
+            afrc.compute_ricci_curvature()
+            _C = sorted(afrc.G.edges, key=lambda x: afrc.G[x[0]][x[1]]['AFRC'])
 
-        # convert _C to a numpy array
-        curv_vals = np.array(_C)
+            # convert _C to a numpy array
+            curv_vals = np.array(_C)
 
-        # find the threshold
-        threshold = _find_threshold(curv_vals)
-        print('Threshold: %f' % threshold)
+            # find the threshold
+            threshold = _find_threshold(curv_vals)
+            print('Threshold: %f' % threshold)
 
-        # Get top negative and positive curved edges
-        most_pos_edges = _C[-batch_remove:]
-        # most_neg_edges = _C[:batch_add]
-        most_neg_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC'] < threshold]
+            # Get top negative and positive curved edges
+            most_pos_edges = _C[-batch_remove:]
+            # most_neg_edges = _C[:batch_add]
+            most_neg_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC'] < threshold]
 
-        # Remove edges
-        for (u, v) in most_pos_edges:
-            if(G.has_edge(u, v)):
-                G.remove_edge(u, v)
+            # Remove edges
+            for (u, v) in most_pos_edges:
+                if(G.has_edge(u, v)):
+                    G.remove_edge(u, v)
 
-        # Add edges
-        for (u, v) in most_neg_edges:
-            # if there is a neighbor w of u that is not a neighbor of v,
-            # choose w at random add an edge between v and w
-            if list(set(G.neighbors(u)) - set(G.neighbors(v))) != []:
-                w = np.random.choice(list(set(G.neighbors(u)) - set(G.neighbors(v))))
-                G.add_edge(v, w)
-                # add attributes "AFRC", "triangles", and "weight" to each added edge
-                G[v][w]["AFRC"] = 0.0
-                G[v][w]["triangles"] = 0
-                G[v][w]["weight"] = 1.0
+            # Add edges
+            for (u, v) in most_neg_edges:
+                # if there is a neighbor w of u that is not a neighbor of v,
+                # choose w at random add an edge between v and w
+                if list(set(G.neighbors(u)) - set(G.neighbors(v))) != []:
+                    w = np.random.choice(list(set(G.neighbors(u)) - set(G.neighbors(v))))
+                    G.add_edge(v, w)
+                    # add attributes "AFRC", "triangles", and "weight" to each added edge
+                    G[v][w]["AFRC"] = 0.0
+                    G[v][w]["triangles"] = 0
+                    G[v][w]["weight"] = 1.0
 
-            # else if there is a neighbor w of v that is not a neighbor of u,
-            # choose w at random add an edge between u and w
-            elif list(set(G.neighbors(v)) - set(G.neighbors(u))) != []:
-                w = np.random.choice(list(set(G.neighbors(v)) - set(G.neighbors(u))))
-                G.add_edge(u, w)
-                # add attributes "AFRC", "triangles", and "weight" to each added edge
-                G[u][w]["AFRC"] = 0.0
-                G[u][w]["triangles"] = 0
-                G[u][w]["weight"] = 1.0
+                # else if there is a neighbor w of v that is not a neighbor of u,
+                # choose w at random add an edge between u and w
+                elif list(set(G.neighbors(v)) - set(G.neighbors(u))) != []:
+                    w = np.random.choice(list(set(G.neighbors(v)) - set(G.neighbors(u))))
+                    G.add_edge(u, w)
+                    # add attributes "AFRC", "triangles", and "weight" to each added edge
+                    G[u][w]["AFRC"] = 0.0
+                    G[u][w]["triangles"] = 0
+                    G[u][w]["weight"] = 1.0
 
-            # else if all neighbors of u are neighbors of v, and vice versa,
-            # do nothing
-            else:
-                pass
+                # else if all neighbors of u are neighbors of v, and vice versa,
+                # do nothing
+                else:
+                    pass
+
+        except ValueError:
+            # if there are no edges with negative curvature, do nothing
+            continue
 
     # get all attributes of the edges in the graph
     edge_attributes = G.graph # dictionary of attributes for the graph
