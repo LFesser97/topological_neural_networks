@@ -443,7 +443,7 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
     # for _ in range(loops):
     current_iteration = 0
 
-    while True:
+    for _ in range(5):
         try:
             # Compute AFRC
             afrc = FormanRicci(G)
@@ -454,8 +454,9 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
             curv_vals = np.array(_C)
 
             # find the threshold
-            threshold = _find_threshold(curv_vals)
-            # print('Threshold: %f' % threshold)
+            if current_iteration == 0:
+                threshold = _find_threshold(curv_vals)
+                print('Threshold: %f' % threshold)
 
             # Get top negative and positive curved edges
             most_pos_edges = _C[-batch_remove:]
@@ -591,7 +592,9 @@ def borf5(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
 
     # Rewiring begins
     # for _ in range(loops):
-    while True:
+    current_iteration = 0
+
+    for _ in range(5):
         try:
             # Compute AFRC
             afrc = FormanRicci4(G)
@@ -601,9 +604,10 @@ def borf5(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
             # convert _C to a numpy array
             curv_vals = np.array(_C)
 
-            # find the threshold
-            threshold = _find_threshold(curv_vals)
-            # print('Threshold: %f' % threshold)
+            if current_iteration == 0:
+                # find the threshold
+                threshold = _find_threshold(curv_vals)
+                print('Threshold: %f' % threshold)
 
             # Get top negative and positive curved edges
             most_pos_edges = _C[-batch_remove:]
