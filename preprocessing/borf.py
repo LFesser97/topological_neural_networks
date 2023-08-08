@@ -438,6 +438,8 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
 
     # Rewiring begins
     # for _ in range(loops):
+    current_iteration = 0
+
     while True:
         try:
             # Compute AFRC
@@ -450,18 +452,20 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
 
             # find the threshold
             threshold = _find_threshold(curv_vals)
-            print('Threshold: %f' % threshold)
+            # print('Threshold: %f' % threshold)
 
             # Get top negative and positive curved edges
             most_pos_edges = _C[-batch_remove:]
             # most_neg_edges = _C[:batch_add]
             most_neg_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC'] < threshold]
 
-            # if there are no edges with negative curvature, stop
+            # if there are no edges with curvature below the threshold, end the loop
             if most_neg_edges == []:
                 break
 
             else:
+                current_iteration += 1
+                print(f'Iteration {current_iteration}')
 
                 # Remove edges
                 for (u, v) in most_pos_edges:
