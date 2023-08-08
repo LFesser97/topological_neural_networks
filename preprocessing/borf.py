@@ -390,6 +390,9 @@ def borf3(
         # get all edges with negative curvature
         most_neg_edges = [edge for edge in _C if orc.G[edge[0]][edge[1]]['ricciCurvature']['rc_curvature'] < 0]
 
+        most_neg_edges_len = len(most_neg_edges)
+        print(f'Number of negative edges: {most_neg_edges_len}')
+
         # if there are no edges with negative curvature, stop
         if most_neg_edges == []:
             break
