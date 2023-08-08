@@ -378,7 +378,7 @@ def borf3(
 
     # Rewiring begins
     # for _ in range(loops):
-    for _ in range(15):
+    for _ in range(5):
         # Compute ORC
         orc = OllivierRicci(G, alpha=0)
         orc.compute_ricci_curvature()
