@@ -79,7 +79,7 @@ for key in datasets:
         print(f"[INFO] BORF hyper-parameter : num_iterations = {args.num_iterations}")
         print(f"[INFO] BORF hyper-parameter : batch_add = {args.borf_batch_add}")
         print(f"[INFO] BORF hyper-parameter : num_iterations = {args.borf_batch_remove}")
-        dataset.data.edge_index, dataset.data.edge_type = borf.borf4(dataset.data, 
+        dataset.data.edge_index, dataset.data.edge_type = borf.borf3(dataset.data, 
                 loops=args.num_iterations, 
                 remove_edges=False, 
                 is_undirected=True,
@@ -88,6 +88,32 @@ for key in datasets:
                 dataset_name=key,
                 graph_index=0)
         print(len(dataset.data.edge_type))
+    elif args.rewiring == "barf_3":
+        print(f"[INFO] BORF hyper-parameter : num_iterations = {args.num_iterations}")
+        print(f"[INFO] BORF hyper-parameter : batch_add = {args.borf_batch_add}")
+        print(f"[INFO] BORF hyper-parameter : batch_remove = {args.borf_batch_remove}")
+        for i in range(len(dataset)):
+            dataset[i].edge_index, dataset[i].edge_type = borf.borf4(dataset[i], 
+                    loops=args.num_iterations, 
+                    remove_edges=False, 
+                    is_undirected=True,
+                    batch_add=args.borf_batch_add,
+                    batch_remove=args.borf_batch_remove,
+                    dataset_name=key,
+                    graph_index=i)
+    elif args.rewiring == "barf_4":
+        print(f"[INFO] BORF hyper-parameter : num_iterations = {args.num_iterations}")
+        print(f"[INFO] BORF hyper-parameter : batch_add = {args.borf_batch_add}")
+        print(f"[INFO] BORF hyper-parameter : batch_remove = {args.borf_batch_remove}")
+        for i in range(len(dataset)):
+            dataset[i].edge_index, dataset[i].edge_type = borf.borf5(dataset[i], 
+                    loops=args.num_iterations, 
+                    remove_edges=False, 
+                    is_undirected=True,
+                    batch_add=args.borf_batch_add,
+                    batch_remove=args.borf_batch_remove,
+                    dataset_name=key,
+                    graph_index=i)
     elif args.rewiring == "sdrf_orc":
         curvature_type = "orc"
         dataset.data.edge_index, dataset.data.edge_type = sdrf.sdrf(dataset.data, loops=args.num_iterations, remove_edges=False, 
