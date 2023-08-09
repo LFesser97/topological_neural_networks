@@ -377,8 +377,8 @@ def borf3(
     G, N, edge_type = _preprocess_data(data)
 
     # Rewiring begins
-    # for _ in range(loops):
-    for _ in range(5):
+    for _ in range(loops):
+    # for _ in range(5):
         # Compute ORC
         orc = OllivierRicci(G, alpha=0)
         orc.compute_ricci_curvature()
@@ -440,10 +440,10 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
     G, N, edge_type = _preprocess_data(data)
 
     # Rewiring begins
-    # for _ in range(loops):
     current_iteration = 0
-
-    for _ in range(5):
+    
+    for _ in range(loops):
+    # for _ in range(5):
         try:
             # Compute AFRC
             afrc = FormanRicci(G)
@@ -591,10 +591,10 @@ def borf5(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
     G, N, edge_type = _preprocess_data(data)
 
     # Rewiring begins
-    # for _ in range(loops):
     current_iteration = 0
 
-    for _ in range(5):
+    for _ in range(loops):
+    # for _ in range(5):
         try:
             # Compute AFRC
             afrc = FormanRicci4(G)
