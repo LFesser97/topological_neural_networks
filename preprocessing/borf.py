@@ -459,8 +459,8 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
             # Get top negative and positive curved edges
             most_pos_edges = _C[-batch_remove:]
             # most_neg_edges = _C[:batch_add]
-            most_neg_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC'] < threshold]
-            # most_neg_edges = _C[:batch_add]
+            # most_neg_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC'] < threshold]
+            most_neg_edges = _C[:batch_add]
 
             # if there are no edges with curvature below the threshold, end the loop
             if most_neg_edges == []:
@@ -611,8 +611,8 @@ def borf5(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
             # Get top negative and positive curved edges
             most_pos_edges = _C[-batch_remove:]
             # most_neg_edges = _C[:batch_add]
-            most_neg_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC_4'] < threshold]
-            # most_neg_edges = _C[:batch_add]
+            # most_neg_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC_4'] < threshold]
+            most_neg_edges = _C[:batch_add]
 
             # if there are no edges with negative curvature, stop
             if most_neg_edges == []:
