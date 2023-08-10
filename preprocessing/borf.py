@@ -388,8 +388,8 @@ def borf3(
         most_pos_edges = _C[-batch_remove:]
 
         # get all edges with negative curvature
-        most_neg_edges = [edge for edge in _C if orc.G[edge[0]][edge[1]]['ricciCurvature']['rc_curvature'] < 0]
-        # most_neg_edges = _C[:batch_add]
+        # most_neg_edges = [edge for edge in _C if orc.G[edge[0]][edge[1]]['ricciCurvature']['rc_curvature'] < 0]
+        most_neg_edges = _C[:batch_add]
 
         # if there are no edges with negative curvature, stop
         if most_neg_edges == []:
