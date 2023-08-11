@@ -1,9 +1,9 @@
-python run_node_classification.py     --rewiring sdrf_bfc     --layer_type GCN    --num_trials 100    --device cuda:0     --num_iterations 12 --dataset cora  --sdrf_remove_edges True
+python run_node_classification.py     --rewiring sdrf_bfc     --layer_type GCN    --num_trials 100    --device cuda:0     --num_iterations 12 --dataset cora
 python run_node_classification.py     # --rewiring sdrf_bfc     --layer_type GCN    --num_trials 100    --device cuda:0     --num_iterations 175 --dataset citeseer --sdrf_remove_edges 
-python run_node_classification.py     --rewiring sdrf_bfc     --layer_type GCN    --num_trials 100    --device cuda:0     --num_iterations 87 --dataset texas --sdrf_remove_edges True
-python run_node_classification.py     --rewiring sdrf_bfc     --layer_type GCN    --num_trials 100    --device cuda:0     --num_iterations 100 --dataset cornell --sdrf_remove_edges True
-python run_node_classification.py     --rewiring sdrf_bfc     --layer_type GCN    --num_trials 100    --device cuda:0     --num_iterations 25 --dataset wisconsin --sdrf_remove_edges True
-python run_node_classification.py     --rewiring sdrf_bfc     --layer_type GCN    --num_trials 100    --device cuda:0     --num_iterations 50 --dataset chameleon --sdrf_remove_edges True
+python run_node_classification.py     --rewiring sdrf_bfc     --layer_type GCN    --num_trials 100    --device cuda:0     --num_iterations 87 --dataset texas
+python run_node_classification.py     --rewiring sdrf_bfc     --layer_type GCN    --num_trials 100    --device cuda:0     --num_iterations 100 --dataset cornell
+python run_node_classification.py     --rewiring sdrf_bfc     --layer_type GCN    --num_trials 100    --device cuda:0     --num_iterations 25 --dataset wisconsin
+python run_node_classification.py     --rewiring sdrf_bfc     --layer_type GCN    --num_trials 100    --device cuda:0     --num_iterations 50 --dataset chameleon
 
 #python run_node_classification.py     --rewiring sdrf_bfc     --layer_type GIN    --num_trials 100    --device cuda:0     --num_iterations 50 --dataset cora
 #python run_node_classification.py     --rewiring sdrf_bfc     --layer_type GIN    --num_trials 100    --device cuda:0     --num_iterations 25 --dataset citeseer
