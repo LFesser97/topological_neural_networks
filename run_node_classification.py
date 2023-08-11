@@ -33,7 +33,7 @@ def log_to_file(message, filename="results/node_classification.txt"):
 
 default_args = AttrDict({
     "dropout": 0.5,
-    "num_layers": 9,
+    "num_layers": 3,
     "hidden_dim": 128,
     "learning_rate": 1e-3,
     "layer_type": "R-GCN",
@@ -59,9 +59,6 @@ if args.dataset:
     # restricts to just the given dataset if this mode is chosen
     name = args.dataset
     datasets = {name: datasets[name]}
-
-# print the depth of the network
-print(f"DEPTH: {args.num_layers}")
 
 for key in datasets:
     accuracies = []
