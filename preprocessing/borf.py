@@ -344,21 +344,10 @@ def borf3(
     """
 
 
-def borf3(
-    data,
-    loops=10,
-    remove_edges=True,
-    removal_bound=0.5,
-    tau=1,
-    is_undirected=False,
-    batch_add=4,
-    batch_remove=2,
-    device=None,
-    save_dir='rewired_graphs',
-    dataset_name=None,
-    graph_index=0,
-    debug=False
-):
+def borf3(data, loops=10, remove_edges=True, removal_bound=0.5, tau=1,
+    is_undirected=False, batch_add=4, batch_remove=2, device=None,
+    save_dir='rewired_graphs', dataset_name=None, graph_index=0, debug=False):
+    
     # Check if there is a preprocessed graph
     dirname = f'{save_dir}/{dataset_name}'
     pathlib.Path(dirname).mkdir(parents=True, exist_ok=True)
