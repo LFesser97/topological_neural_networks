@@ -374,20 +374,20 @@ def borf3(data, loops=10, remove_edges=True, removal_bound=0.5, tau=1,
         _C = sorted(orc.G.edges, key=lambda x: orc.G[x[0]][x[1]]['ricciCurvature']['rc_curvature'])
 
         # get upper bound
-        # mean1, std1, mean2, std2 = _find_threshold(np.array(_C))[1:]
+        mean1, std1, mean2, std2 = _find_threshold(np.array(_C))[1:]
 
-        # if mean1 > mean2:
-        #    upper_bound = mean1 + std1
-        # else:
-        #    upper_bound = mean2 + std2
+        if mean1 > mean2:
+            upper_bound = mean1 + std1
+        else:
+            upper_bound = mean2 + std2
 
         # Get top positive curved edges
-        # most_pos_edges = [edge for edge in _C if orc.G[edge[0]][edge[1]]['ricciCurvature']['rc_curvature'] > upper_bound]
-        most_pos_edges = _C[-batch_remove:]
+        most_pos_edges = [edge for edge in _C if orc.G[edge[0]][edge[1]]['ricciCurvature']['rc_curvature'] > upper_bound]
+        # most_pos_edges = _C[-batch_remove:]
 
         # get all edges with negative curvature
-        # most_neg_edges = [edge for edge in _C if orc.G[edge[0]][edge[1]]['ricciCurvature']['rc_curvature'] < 0]
-        most_neg_edges = _C[:batch_add]
+        most_neg_edges = [edge for edge in _C if orc.G[edge[0]][edge[1]]['ricciCurvature']['rc_curvature'] < 0]
+        # most_neg_edges = _C[:batch_add]
 
         # if there are no edges with negative curvature, stop
         if most_neg_edges == []:
@@ -447,19 +447,19 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
             _C = sorted(afrc.G.edges, key=lambda x: afrc.G[x[0]][x[1]]['AFRC'])
 
             # find the bounds
-            # if current_iteration == 0:
-            #    lower_bound, mean1, std1, mean2, std2 = _find_threshold(np.array(_C))
-            #    if mean1 > mean2:
-            #        upper_bound = mean1 + std1
-            #    else:
-            #        upper_bound = mean2 + std2
+            if current_iteration == 0:
+                lower_bound, mean1, std1, mean2, std2 = _find_threshold(np.array(_C))
+                if mean1 > mean2:
+                    upper_bound = mean1 + std1
+                else:
+                    upper_bound = mean2 + std2
  
             # Get top negative and positive curved edges
-            # most_pos_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC'] > upper_bound]
-            most_pos_edges = _C[-batch_remove:]
+            most_pos_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC'] > upper_bound]
+            # most_pos_edges = _C[-batch_remove:]
             
-            # most_neg_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC'] < lower_bound]
-            most_neg_edges = _C[:batch_add]
+            most_neg_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC'] < lower_bound]
+            # most_neg_edges = _C[:batch_add]
 
             # if there are no edges with curvature below the threshold, end the loop
             if most_neg_edges == []:
@@ -600,19 +600,19 @@ def borf5(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
             _C = sorted(afrc.G.edges, key=lambda x: afrc.G[x[0]][x[1]]['AFRC_4'])
 
             # find the bounds
-            # if current_iteration == 0:
-            #    lower_bound, mean1, std1, mean2, std2 = _find_threshold(np.array(_C))
-            #    if mean1 > mean2:
-            #        upper_bound = mean1 + std1
-            #    else:
-            #        upper_bound = mean2 + std2
+            if current_iteration == 0:
+                lower_bound, mean1, std1, mean2, std2 = _find_threshold(np.array(_C))
+                if mean1 > mean2:
+                    upper_bound = mean1 + std1
+                else:
+                    upper_bound = mean2 + std2
 
             # Get top negative and positive curved edges
-            # most_pos_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC_4'] > upper_bound]
-            most_pos_edges = _C[-batch_remove:]
+            most_pos_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC_4'] > upper_bound]
+            # most_pos_edges = _C[-batch_remove:]
             
-            # most_neg_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC_4'] < lower_bound]
-            most_neg_edges = _C[:batch_add]
+            most_neg_edges = [edge for edge in _C if afrc.G[edge[0]][edge[1]]['AFRC_4'] < lower_bound]
+            # most_neg_edges = _C[:batch_add]
 
             # if there are no edges with negative curvature, stop
             if most_neg_edges == []:
