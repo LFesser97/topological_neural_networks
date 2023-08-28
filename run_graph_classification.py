@@ -30,7 +30,7 @@ peptides_zip_filepath = os.getcwd()
 wget.download(peptides_url, peptides_zip_filepath)
 
 # Unzip the folder
-pepties_zip = os.join(peptides_zip_filepath, "peptidesfunc.zip")
+pepties_zip = os.path.join(peptides_zip_filepath, "peptidesfunc.zip")
 extract_dir = peptides_zip_filepath
 
 with zipfile.ZipFile(pepties_zip, 'r') as zip_ref:
