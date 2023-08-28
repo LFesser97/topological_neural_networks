@@ -18,6 +18,7 @@ texas = WebKB(root="data", name="Texas")
 chameleon = WikipediaNetwork(root="data", name="chameleon")
 cora = Planetoid(root="data", name="cora")
 citeseer = Planetoid(root="data", name="citeseer")
+
 datasets = {"cornell": cornell, "wisconsin": wisconsin, "texas": texas, 
         "chameleon": chameleon, "cora": cora, "citeseer": citeseer}
 

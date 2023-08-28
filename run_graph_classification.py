@@ -1,5 +1,6 @@
 from attrdict import AttrDict
 from torch_geometric.datasets import TUDataset
+from torch_geometric.data import Data
 from torch_geometric.utils import to_networkx, from_networkx, to_dense_adj
 from experiments.graph_classification import Experiment
 
@@ -12,29 +13,36 @@ from hyperparams import get_args_from_input
 from preprocessing import rewiring, sdrf, fosr, digl, borf
 
 import pickle
+import wget
+import zipfile
+import os
 
 mutag = list(TUDataset(root="data", name="MUTAG"))
 enzymes = list(TUDataset(root="data", name="ENZYMES"))
 proteins = list(TUDataset(root="data", name="PROTEINS"))
 imdb = list(TUDataset(root="data", name="IMDB-BINARY"))
 
+# load peptides dataset from url to the current directory using os and wget
+peptides_url = "https://www.dropbox.com/s/ycsq37q8sxs1ou8/peptidesfunc.zip?dl=1"
+peptides_zip_filepath = os.getcwd()
 
-# read datasets from pickle files
-#with open("mutag.pkl", "rb") as f:
-#    mutag = pickle.load(f)
+# Download the zip folder
+wget.download(peptides_url, peptides_zip_filepath)
 
-#with open("enzymes.pkl", "rb") as f:
-#    enzymes = pickle.load(f)
+# Unzip the folder
+pepties_zip = os.join(peptides_zip_filepath, "peptidesfunc.zip")
+extract_dir = peptides_zip_filepath
 
-#with open("proteins.pkl", "rb") as f:
-#    proteins = pickle.load(f)
+with zipfile.ZipFile(pepties_zip, 'r') as zip_ref:
+    zip_ref.extractall(extract_dir)
 
-#with open("imdb.pkl", "rb") as f:
-#    imdb = pickle.load(f)
+# load the peptides dataset train.pt
+peptides = torch.load(os.path.join(extract_dir, "peptidesfunc", "train.pt"))
 
-datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
+pascal = None
 
-# datasets = {"imdb": imdb}
+datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb,
+            "peptides" : peptides, "pascal" : pascal}
 
 
 for key in datasets:
@@ -104,7 +112,12 @@ for key in datasets:
     test_accuracies = []
     energies = []
     print(f"TESTING: {key} ({args.rewiring} - layer {args.layer_type})")
-    dataset = datasets[key]
+
+    if key in ["peptides", "pascal", "coco"]:
+        dataset = [_convert_lrgb(peptides[i]) for i in range(len(peptides))]
+
+    else:
+        dataset = datasets[key]
 
     print('REWIRING STARTED...')
     start = time.time()
@@ -226,3 +239,12 @@ for key in datasets:
     df = pd.DataFrame(results)
     with open(f'results/graph_classification_{args.layer_type}_{args.rewiring}.csv', 'a') as f:
         df.to_csv(f, mode='a', header=f.tell()==0)
+
+
+def _convert_lrgb(dataset: torch.Tensor) -> torch.Tensor:
+    x = dataset[0]
+    edge_attr = dataset[1]
+    edge_index = dataset[2]
+    y = dataset[3]
+
+    return Data(x = x, edge_index = edge_index, y = y, edge_attr = edge_attr)
