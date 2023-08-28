@@ -94,7 +94,8 @@ hyperparams = {
     "proteins": AttrDict({"output_dim": 2}),
     "collab": AttrDict({"output_dim": 3}),
     "imdb": AttrDict({"output_dim": 2}),
-    "reddit": AttrDict({"output_dim": 2})
+    "reddit": AttrDict({"output_dim": 2}),
+    "peptides": AttrDict({"output_dim": 10}),
 }
 
 results = []
