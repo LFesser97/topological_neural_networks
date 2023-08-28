@@ -28,7 +28,7 @@ default_args = AttrDict(
     "output_dim": 1,
     "hidden_layers": None,
     "num_layers": 1,
-    "batch_size": 64,
+    "batch_size": 10,
     "layer_type": "R-GCN",
     "num_relations": 2,
     "last_layer_fa": False
@@ -169,6 +169,7 @@ class Experiment:
                 total_correct += pred.eq(y).sum().item()
                 
         return total_correct / sample_size
+    
     def check_dirichlet(self, loader):
         self.model.eval()
         sample_size = len(loader.dataset)
