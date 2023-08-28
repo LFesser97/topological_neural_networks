@@ -37,7 +37,7 @@ with zipfile.ZipFile(pepties_zip, 'r') as zip_ref:
     zip_ref.extractall(extract_dir)
 
 # load the peptides dataset train.pt
-peptides = torch.load(os.path.join(extract_dir, "peptidesfunc", "train.pt"))
+peptides = torch.load(os.path.join(extract_dir, "peptidesfunc", "test.pt"))
 
 pascal = None
 
