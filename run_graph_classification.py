@@ -66,6 +66,14 @@ def log_to_file(message, filename="results/graph_classification.txt"):
     file.write(message)
     file.close()
 
+def _convert_lrgb(dataset: torch.Tensor) -> torch.Tensor:
+    x = dataset[0]
+    edge_attr = dataset[1]
+    edge_index = dataset[2]
+    y = dataset[3]
+
+    return Data(x = x, edge_index = edge_index, y = y, edge_attr = edge_attr)
+
 default_args = AttrDict({
     "dropout": 0.5,
     "num_layers": 4,
@@ -240,12 +248,3 @@ for key in datasets:
     df = pd.DataFrame(results)
     with open(f'results/graph_classification_{args.layer_type}_{args.rewiring}.csv', 'a') as f:
         df.to_csv(f, mode='a', header=f.tell()==0)
-
-
-def _convert_lrgb(dataset: torch.Tensor) -> torch.Tensor:
-    x = dataset[0]
-    edge_attr = dataset[1]
-    edge_index = dataset[2]
-    y = dataset[3]
-
-    return Data(x = x, edge_index = edge_index, y = y, edge_attr = edge_attr)
