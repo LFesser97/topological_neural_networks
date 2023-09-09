@@ -163,7 +163,7 @@ for key in datasets:
     print(f"TESTING: {key} ({args.rewiring} - layer {args.layer_type})")
 
     if key in ["peptides", "pascal", "coco"]:
-        dataset = [_convert_lrgb(peptides[i]) for i in range(len(peptides))]
+        dataset = [_convert_lrgb(coco[i]) for i in range(len(coco))]
 
         # only use every 10th element if the key is coco
         if key == "coco":
