@@ -31,18 +31,50 @@ wget.download(peptides_url, peptides_zip_filepath)
 
 # Unzip the folder
 pepties_zip = os.path.join(peptides_zip_filepath, "peptidesfunc.zip")
-extract_dir = peptides_zip_filepath
 
 with zipfile.ZipFile(pepties_zip, 'r') as zip_ref:
-    zip_ref.extractall(extract_dir)
+    zip_ref.extractall(peptides_zip_filepath)
 
 # load the peptides dataset train.pt
-peptides = torch.load(os.path.join(extract_dir, "peptidesfunc", "test.pt"))
+peptides = torch.load(os.path.join(peptides_zip_filepath, "peptidesfunc", "test.pt"))
 
-pascal = None
+
+# load pascal dataset from url to the current directory using os and wget
+pascal_url = "https://www.dropbox.com/s/8x722ai272wqwl4/pascalvocsp.zip?dl=1"
+pascal_zip_filepath = os.getcwd()
+
+# Download the zip folder
+wget.download(pascal_url, pascal_zip_filepath)
+
+# Unzip the folder
+pascal_zip = os.path.join(pascal_zip_filepath, "pascalvocsp.zip")
+
+with zipfile.ZipFile(pascal_zip, 'r') as zip_ref:
+    zip_ref.extractall(pascal_zip_filepath)
+
+# load the pascal dataset train.pt
+pascal = torch.load(os.path.join(pascal_zip_filepath, "pascalvocsp", "test.pt"))
+
+
+# load coco dataset from url to the current directory using os and wget
+coco_url = 'https://www.dropbox.com/s/r6ihg1f4pmyjjy0/cocosp.zip?dl=1'
+coco_zip_filepath = os.getcwd()
+
+# Download the zip folder
+wget.download(coco_url, coco_zip_filepath)
+
+# Unzip the folder
+coco_zip = os.path.join(coco_zip_filepath, "cocosp.zip")
+
+with zipfile.ZipFile(coco_zip, 'r') as zip_ref:
+    zip_ref.extractall(coco_zip_filepath)
+
+# load the coco dataset train.pt
+coco = torch.load(os.path.join(coco_zip_filepath, "cocosp", "test.pt"))
+
 
 datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb,
-            "peptides" : peptides, "pascal" : pascal}
+            "peptides" : peptides, "pascal" : pascal, "coco" : coco}
 
 
 for key in datasets:
