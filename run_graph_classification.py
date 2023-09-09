@@ -53,7 +53,8 @@ with zipfile.ZipFile(pascal_zip, 'r') as zip_ref:
     zip_ref.extractall(pascal_zip_filepath)
 
 # load the pascal dataset train.pt
-pascal = pickle.load(os.path.join(pascal_zip_filepath, "voc_superpixels_edge_wt_region_boundary", "test.pickle"))
+with open(os.path.join(pascal_zip_filepath, "voc_superpixels_edge_wt_region_boundary", "test.pickle"), 'rb') as f:
+    pascal = pickle.load(f)
 
 """
 # load coco dataset from url to the current directory using os and wget
