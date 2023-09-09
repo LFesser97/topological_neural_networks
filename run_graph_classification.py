@@ -22,6 +22,7 @@ enzymes = list(TUDataset(root="data", name="ENZYMES"))
 proteins = list(TUDataset(root="data", name="PROTEINS"))
 imdb = list(TUDataset(root="data", name="IMDB-BINARY"))
 
+"""
 # load peptides dataset from url to the current directory using os and wget
 peptides_url = "https://www.dropbox.com/s/ycsq37q8sxs1ou8/peptidesfunc.zip?dl=1"
 peptides_zip_filepath = os.getcwd()
@@ -55,8 +56,11 @@ with zipfile.ZipFile(pascal_zip, 'r') as zip_ref:
 # load the pascal dataset train.pt
 with open(os.path.join(pascal_zip_filepath, "voc_superpixels_edge_wt_region_boundary", "test.pickle"), 'rb') as f:
     pascal = pickle.load(f)
-
 """
+peptides = None
+pascal = None
+
+
 # load coco dataset from url to the current directory using os and wget
 coco_url = 'https://www.dropbox.com/s/r6ihg1f4pmyjjy0/cocosp.zip?dl=1'
 coco_zip_filepath = os.getcwd()
@@ -72,8 +76,6 @@ with zipfile.ZipFile(coco_zip, 'r') as zip_ref:
 
 # load the coco dataset train.pt
 coco = torch.load(os.path.join(coco_zip_filepath, "cocosp", "test.pt"))
-"""
-coco = None
 
 
 datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb,
