@@ -75,7 +75,8 @@ with zipfile.ZipFile(coco_zip, 'r') as zip_ref:
     zip_ref.extractall(coco_zip_filepath)
 
 # load the coco dataset train.pt
-coco = torch.load(os.path.join(coco_zip_filepath, "cocosp", "test.pt"))
+with open(os.path.join(coco_zip_filepath, "coco_superpixels_edge_wt_region_boundary", "test.pickle"), 'rb') as f:
+    coco = pickle.load(f)
 
 
 datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb,
@@ -163,6 +164,10 @@ for key in datasets:
 
     if key in ["peptides", "pascal", "coco"]:
         dataset = [_convert_lrgb(peptides[i]) for i in range(len(peptides))]
+
+        # only use every 10th element if the key is coco
+        if key == "coco":
+            dataset = dataset[::10]
 
     else:
         dataset = datasets[key]
