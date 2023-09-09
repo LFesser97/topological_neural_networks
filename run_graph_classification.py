@@ -197,7 +197,10 @@ for key in datasets:
     end = time.time()
     rewiring_duration = end - start
 
+    print('REWIRING COMPLETED...')
 
+
+    """
     #spectral_gap = average_spectral_gap(dataset)
     print('TRAINING STARTED...')
     start = time.time()
@@ -248,3 +251,4 @@ for key in datasets:
     df = pd.DataFrame(results)
     with open(f'results/graph_classification_{args.layer_type}_{args.rewiring}.csv', 'a') as f:
         df.to_csv(f, mode='a', header=f.tell()==0)
+    """

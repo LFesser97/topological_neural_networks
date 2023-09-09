@@ -351,8 +351,8 @@ def borf3(data, loops=10, remove_edges=True, removal_bound=0.5, tau=1,
     # Check if there is a preprocessed graph
     dirname = f'{save_dir}/{dataset_name}'
     pathlib.Path(dirname).mkdir(parents=True, exist_ok=True)
-    edge_index_filename = os.path.join(dirname, f'iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_index_{graph_index}.pt')
-    edge_type_filename = os.path.join(dirname, f'iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_type_{graph_index}.pt')
+    edge_index_filename = os.path.join(dirname, f'borf_iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_index_{graph_index}.pt')
+    edge_type_filename = os.path.join(dirname, f'borf_iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_type_{graph_index}.pt')
 
     if(os.path.exists(edge_index_filename) and os.path.exists(edge_type_filename)):
         if(debug) : print(f'[INFO] Rewired graph for {loops} iterations, {batch_add} edge additions and {batch_remove} edge removal exists...')
@@ -429,8 +429,8 @@ def borf4(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
     # Check if there is a preprocessed graph
     dirname = f'{save_dir}/{dataset_name}'
     pathlib.Path(dirname).mkdir(parents=True, exist_ok=True)
-    edge_index_filename = os.path.join(dirname, f'iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_index_{graph_index}.pt')
-    edge_type_filename = os.path.join(dirname, f'iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_type_{graph_index}.pt')
+    edge_index_filename = os.path.join(dirname, f'afr_3_iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_index_{graph_index}.pt')
+    edge_type_filename = os.path.join(dirname, f'afr_3_iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_type_{graph_index}.pt')
 
     # Preprocess data
     G, N, edge_type = _preprocess_data(data)
@@ -582,8 +582,8 @@ def borf5(data, loops=10, remove_edges=True, is_undirected=False, batch_add=4, b
     # Check if there is a preprocessed graph
     dirname = f'{save_dir}/{dataset_name}'
     pathlib.Path(dirname).mkdir(parents=True, exist_ok=True)
-    edge_index_filename = os.path.join(dirname, f'iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_index_{graph_index}.pt')
-    edge_type_filename = os.path.join(dirname, f'iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_type_{graph_index}.pt')
+    edge_index_filename = os.path.join(dirname, f'afr_4_iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_index_{graph_index}.pt')
+    edge_type_filename = os.path.join(dirname, f'afr_4_iters_{loops}_add_{batch_add}_remove_{batch_remove}_edge_type_{graph_index}.pt')
 
     # Preprocess data
     G, N, edge_type = _preprocess_data(data)
