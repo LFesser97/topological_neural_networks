@@ -175,8 +175,8 @@ for key in datasets:
 
     # dataset encodings
     print('ENCODING STARTED...')
-    
-    transform = T.Compose([T.AddLaplacianEigenvectorPE()])
+
+    transform = T.AddLaplacianEigenvectorPE()
 
     for i in tqdm(len(dataset)):
         dataset[i] = transform(dataset[i])
