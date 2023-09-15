@@ -172,6 +172,8 @@ for key in datasets:
         dataset = datasets[key]
 
     print('REWIRING STARTED...')
+
+    """
     start = time.time()
     with tqdm.tqdm(total=len(dataset)) as pbar:
         if args.rewiring == "fosr":
@@ -241,6 +243,7 @@ for key in datasets:
     rewiring_duration = end - start
 
     print('REWIRING COMPLETED...')
+    """
 
 
     
