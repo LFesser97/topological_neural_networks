@@ -76,14 +76,10 @@ with zipfile.ZipFile(coco_zip, 'r') as zip_ref:
 with open(os.path.join(coco_zip_filepath, "coco_superpixels_edge_wt_region_boundary", "test.pickle"), 'rb') as f:
     coco = pickle.load(f)
 """
-peptides = None
-pascal = None
-coco = None
 
+# datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
 
-datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb,
-            "peptides" : peptides, "pascal" : pascal, "coco" : coco}
-
+datasets = {"mutag": mutag, "enzymes": enzymes, "imdb": imdb}
 
 for key in datasets:
     if key in ["reddit", "imdb", "collab"]:
