@@ -2,6 +2,8 @@ from attrdict import AttrDict
 from torch_geometric.datasets import TUDataset
 from torch_geometric.data import Data
 from torch_geometric.utils import to_networkx, from_networkx, to_dense_adj
+import torch_geometric.transforms as T
+
 from experiments.graph_classification import Experiment
 
 import time
@@ -171,9 +173,17 @@ for key in datasets:
     else:
         dataset = datasets[key]
 
-    print('REWIRING STARTED...')
+    # dataset encodings
+    print('ENCODING STARTED...')
+    
+    transform = T.Compose([T.AddLaplacianEigenvectorPE()])
+
+    for i in tqdm(len(dataset)):
+        dataset[i] = transform(dataset[i])
+
 
     """
+    print('REWIRING STARTED...')
     start = time.time()
     with tqdm.tqdm(total=len(dataset)) as pbar:
         if args.rewiring == "fosr":
