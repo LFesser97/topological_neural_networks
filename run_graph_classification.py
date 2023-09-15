@@ -186,7 +186,8 @@ for key in datasets:
         try:
             dataset[i] = transform(dataset[i])
 
-        except TypeError:
+        # if a TypeError or a RuntimeWarning is raised, drop the graph
+        except (TypeError, RuntimeWarning) as e:
             print(f"Error: tried to compute {eigvecs} eigenvectors, but graph has only {num_nodes} nodes.")
             
             # drop the graph if it has too few nodes
