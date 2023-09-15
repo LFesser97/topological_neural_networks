@@ -188,7 +188,9 @@ for key in datasets:
 
         except TypeError:
             print(f"Error: tried to compute {eigvecs} eigenvectors, but graph has only {num_nodes} nodes.")
-            continue
+            
+            # drop the graph if it has too few nodes
+            dataset.pop(i)
 
 
     """
