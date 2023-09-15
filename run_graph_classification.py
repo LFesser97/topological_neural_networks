@@ -319,7 +319,6 @@ for key in datasets:
         "energy_mean": energy_mean,
         "energy_ci": energy_ci,
         "last_layer_fa": args.last_layer_fa,
-        "rewiring_duration" : rewiring_duration,
         "run_duration" : run_duration,
     })
 
