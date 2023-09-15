@@ -177,7 +177,7 @@ for key in datasets:
     # dataset encodings
     print('ENCODING STARTED...')
 
-    for i in tqdm(len(dataset)):
+    for i in len(dataset):
         num_nodes = dataset[i].num_nodes
         eigvecs = np.min([num_nodes, 10])
 
