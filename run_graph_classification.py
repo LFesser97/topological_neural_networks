@@ -182,16 +182,14 @@ for key in datasets:
         eigvecs = np.min([num_nodes, 10]) - 2
 
         transform = T.AddLaplacianEigenvectorPE(k=eigvecs)
-
-        try:
+        
+        if num_nodes > 10:
             dataset[i] = transform(dataset[i])
 
-        # if a TypeError or a RuntimeWarning is raised, drop the graph
-        except (TypeError, RuntimeWarning) as e:
-            print(f"Error: tried to compute {eigvecs} eigenvectors, but graph has only {num_nodes} nodes.")
-            
-            # drop the graph if it has too few nodes
+        # if the graph has 10 nodes or less, drop it from the dataset
+        else:
             dataset.pop(i)
+            print(f"Graph {i} has {num_nodes} nodes and was dropped from the dataset.")
 
 
     """
