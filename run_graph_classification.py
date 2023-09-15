@@ -179,7 +179,7 @@ for key in datasets:
 
     for i in range(len(dataset)):
         num_nodes = dataset[i].num_nodes
-        eigvecs = np.min([num_nodes, 10])
+        eigvecs = np.min([num_nodes, 10]) - 1
 
         transform = T.AddLaplacianEigenvectorPE(k=eigvecs)
         dataset[i] = transform(dataset[i])
