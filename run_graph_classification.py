@@ -19,7 +19,7 @@ import wget
 import zipfile
 import os
 
-transform = T.AddLaplacianEigenvectorPE()
+transform = T.AddLaplacianEigenvectorPE(k=20)
 
 mutag = list(TUDataset(root="data", name="MUTAG", transform = transform))
 enzymes = list(TUDataset(root="data", name="ENZYMES", transform = transform))
