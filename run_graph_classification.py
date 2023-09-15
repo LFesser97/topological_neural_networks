@@ -179,16 +179,19 @@ for key in datasets:
 
     for i in range(len(dataset)):
         num_nodes = dataset[i].num_nodes
+        eigvecs = np.min([num_nodes, 10]) - 2
 
-        transform = T.AddLaplacianEigenvectorPE(k=8)
-        
-        if num_nodes > 10:
+        transform = T.AddLaplacianEigenvectorPE(k=eigvecs)
+
+        try:
             dataset[i] = transform(dataset[i])
 
-        # if the graph has 10 nodes or less, drop it from the dataset
-        else:
+        # if a TypeError or an ARPACK error occurs, drop the graph
+        except:
+            print(f"Graph {i} dropped due to error in encoding")
+            
+            # drop the graph if it has too few nodes
             dataset.pop(i)
-            print(f"Graph {i} has {num_nodes} nodes and was dropped from the dataset.")
 
 
     """
