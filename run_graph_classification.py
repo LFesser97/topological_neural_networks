@@ -38,7 +38,6 @@ with zipfile.ZipFile(pepties_zip, 'r') as zip_ref:
 
 # load the peptides dataset train.pt
 peptides = torch.load(os.path.join(peptides_zip_filepath, "peptidesfunc", "test.pt"))
-"""
 
 # load pascal dataset from url to the current directory using os and wget
 pascal_url = "https://www.dropbox.com/s/8x722ai272wqwl4/pascalvocsp.zip?dl=1"
@@ -57,10 +56,6 @@ with zipfile.ZipFile(pascal_zip, 'r') as zip_ref:
 with open(os.path.join(pascal_zip_filepath, "voc_superpixels_edge_wt_region_boundary", "test.pickle"), 'rb') as f:
     pascal = pickle.load(f)
 
-peptides = None
-coco = None
-
-"""
 # load coco dataset from url to the current directory using os and wget
 coco_url = 'https://www.dropbox.com/s/r6ihg1f4pmyjjy0/cocosp.zip?dl=1'
 coco_zip_filepath = os.getcwd()
@@ -78,6 +73,9 @@ with zipfile.ZipFile(coco_zip, 'r') as zip_ref:
 with open(os.path.join(coco_zip_filepath, "coco_superpixels_edge_wt_region_boundary", "test.pickle"), 'rb') as f:
     coco = pickle.load(f)
 """
+peptides = None
+pascal = None
+coco = None
 
 
 datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb,
@@ -245,7 +243,7 @@ for key in datasets:
     print('REWIRING COMPLETED...')
 
 
-    """
+    
     #spectral_gap = average_spectral_gap(dataset)
     print('TRAINING STARTED...')
     start = time.time()
@@ -296,4 +294,3 @@ for key in datasets:
     df = pd.DataFrame(results)
     with open(f'results/graph_classification_{args.layer_type}_{args.rewiring}.csv', 'a') as f:
         df.to_csv(f, mode='a', header=f.tell()==0)
-    """
