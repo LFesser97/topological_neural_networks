@@ -177,7 +177,9 @@ for key in datasets:
     # dataset encodings
     print('ENCODING STARTED...')
 
-    for i in range(len(dataset)):
+    org_dataset_len = len(dataset)
+
+    for i in range(org_dataset_len):
         num_nodes = dataset[i].num_nodes
         eigvecs = np.min([num_nodes, 10]) - 2
 
