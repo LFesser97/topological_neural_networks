@@ -179,6 +179,8 @@ for key in datasets:
 
     org_dataset_len = len(dataset)
 
+    drop_datasets = []
+
     for i in range(org_dataset_len):
         num_nodes = dataset[i].num_nodes
         eigvecs = np.min([num_nodes, 10]) - 2
@@ -192,8 +194,12 @@ for key in datasets:
         except:
             print(f"Graph {i} dropped due to error in encoding")
             
-            # drop the graph if it has too few nodes
-            dataset.pop(i)
+            drop_datasets.append(i)
+            
+
+    # drop the graphs that were dropped in the encoding process
+    for i in sorted(drop_datasets, reverse=True):
+        dataset.pop(i)
 
 
     """
