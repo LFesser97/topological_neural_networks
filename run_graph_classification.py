@@ -19,12 +19,11 @@ import wget
 import zipfile
 import os
 
-transform = T.AddLaplacianEigenvectorPE(k=20)
 
-mutag = list(TUDataset(root="data", name="MUTAG", transform = transform))
-enzymes = list(TUDataset(root="data", name="ENZYMES", transform = transform))
-proteins = list(TUDataset(root="data", name="PROTEINS", transform = transform))
-imdb = list(TUDataset(root="data", name="IMDB-BINARY", transform = transform))
+mutag = list(TUDataset(root="data", name="MUTAG"))
+enzymes = list(TUDataset(root="data", name="ENZYMES"))
+proteins = list(TUDataset(root="data", name="PROTEINS"))
+imdb = list(TUDataset(root="data", name="IMDB-BINARY"))
 
 """
 # load peptides dataset from url to the current directory using os and wget
@@ -176,10 +175,14 @@ for key in datasets:
         dataset = datasets[key]
 
     # dataset encodings
-    # print('ENCODING STARTED...')
+    print('ENCODING STARTED...')
 
-    # for i in tqdm(len(dataset)):
-    #    dataset[i] = transform(dataset[i])
+    for i in tqdm(len(dataset)):
+        num_nodes = dataset[i].num_nodes
+        eigvecs = np.min([num_nodes, 10])
+
+        transform = T.AddLaplacianEigenvectorPE(k=eigvecs)
+        dataset[i] = transform(dataset[i])
 
 
     """
