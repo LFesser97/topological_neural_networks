@@ -17,7 +17,7 @@ from torch_geometric.data import Data
 from torch_geometric.utils import to_networkx
 from torch_geometric.transforms import BaseTransform
 
-from ricci_curvature.ollivier_ricci import OllivierRicci
+from GraphRicciCurvature.OllivierRicci import OllivierRicci
 
 
 class ShortestPathGenerator:
