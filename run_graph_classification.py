@@ -181,8 +181,13 @@ for key in datasets:
         num_nodes = dataset[i].num_nodes
         eigvecs = np.min([num_nodes, 10]) - 2
 
+        # print("Encoding Random Walk PE")
         # transform = T.AddRandomWalkPE(walk_length=16)
-        transform = T.AddLaplacianEigenvectorPE(k=8)
+
+        # transform = T.AddLaplacianEigenvectorPE(k=8)
+        # print("Encoding Laplacian Eigenvector PE")
+
+        transform = T.RootedRWSubgraph(walk_length=10)
 
         try:
             dataset[i] = transform(dataset[i])
@@ -199,7 +204,7 @@ for key in datasets:
         dataset.pop(i)
 
 
-    
+    """
     print('REWIRING STARTED...')
     start = time.time()
     with tqdm.tqdm(total=len(dataset)) as pbar:
@@ -270,6 +275,7 @@ for key in datasets:
     rewiring_duration = end - start
 
     print('REWIRING COMPLETED...')
+    """
     
 
 
