@@ -186,8 +186,8 @@ for key in datasets:
         num_nodes = dataset[i].num_nodes
         eigvecs = np.min([num_nodes, 10]) - 2
 
-        # print("Encoding Random Walk PE")
         # transform = T.AddRandomWalkPE(walk_length=16)
+        # print("Encoding Random Walk PE")
 
         # transform = T.AddLaplacianEigenvectorPE(k=8)
         # print("Encoding Laplacian Eigenvector PE")
@@ -195,8 +195,14 @@ for key in datasets:
         # transform = T.RootedRWSubgraph(walk_length=10)
         # print("Encoding Rooted RW Subgraph")
 
-        transform = Compose([ShortestPathGenerator(), OneHotEdgeAttr()])
-        print("Encoding Shortest Path PE")
+        # transform = Compose([ShortestPathGenerator(), OneHotEdgeAttr()])
+        # print("Encoding Shortest Path PE")
+
+        transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
+        print("Encoding Rooted RW Subgraph + Random Walk PE")
+
+        # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
+        # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
         dataset[i] = transform(dataset[i])
     
