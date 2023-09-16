@@ -189,15 +189,8 @@ for key in datasets:
 
         transform = T.RootedRWSubgraph(walk_length=10)
 
-        try:
-            dataset[i] = transform(dataset[i])
-
-        # if a TypeError or an ARPACK error occurs, drop the graph
-        except:
-            print(f"Graph {i} dropped due to error in encoding")
-            
-            drop_datasets.append(i)
-            
+        dataset[i] = transform(dataset[i])
+    
 
     # drop the graphs that were dropped in the encoding process
     for i in sorted(drop_datasets, reverse=True):
