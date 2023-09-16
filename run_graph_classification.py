@@ -204,7 +204,7 @@ for key in datasets:
         # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
         # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
-        transform = Compose([LocalCurvatureProfile(), T.AddRandomWalkPE(walk_length=16)])
+        transform = T.Compose([LocalCurvatureProfile(), T.AddRandomWalkPE(walk_length=16)])
         print("Encoding Local Curvature Profile + Random Walk PE")
 
         dataset[i] = transform(dataset[i])
