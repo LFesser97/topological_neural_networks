@@ -77,9 +77,9 @@ with open(os.path.join(coco_zip_filepath, "coco_superpixels_edge_wt_region_bound
     coco = pickle.load(f)
 """
 
-datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
+# datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
 
-# datasets = {"mutag": mutag, "enzymes": enzymes, "imdb": imdb}
+datasets = {"mutag": mutag, "enzymes": enzymes, "imdb": imdb}
 
 for key in datasets:
     if key in ["reddit", "imdb", "collab"]:
@@ -181,7 +181,8 @@ for key in datasets:
         num_nodes = dataset[i].num_nodes
         eigvecs = np.min([num_nodes, 10]) - 2
 
-        transform = T.AddRandomWalkPE(walk_length=16)
+        # transform = T.AddRandomWalkPE(walk_length=16)
+        transform = T.AddLaplacianEigenvectorPE(k=8)
 
         try:
             dataset[i] = transform(dataset[i])
