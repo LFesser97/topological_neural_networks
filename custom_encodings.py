@@ -75,6 +75,11 @@ class LocalCurvatureProfile(BaseTransform):
         neighbors = [list(graph.neighbors(node)) for node in graph.nodes()]
     
         # compute the min, max, mean, std, and median of the ORC for each node
+        for node in graph.nodes():
+            for neighbor in neighbors[node]:
+                print(orc.G.edges[node, neighbor]["ricciCurvature"])
+                print(type(orc.G.edges[node, neighbor]["ricciCurvature"]))
+
         min_orc = [min([orc.G.edges[node, neighbor]["ricciCurvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
         max_orc = [max([orc.G.edges[node, neighbor]["ricciCurvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
         mean_orc = [np.mean([orc.G.edges[node, neighbor]["ricciCurvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
