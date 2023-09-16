@@ -82,9 +82,9 @@ with open(os.path.join(coco_zip_filepath, "coco_superpixels_edge_wt_region_bound
     coco = pickle.load(f)
 """
 
-datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
+# datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
 
-# datasets = {"mutag": mutag, "enzymes": enzymes, "imdb": imdb}
+datasets = {"mutag": mutag, "enzymes": enzymes, "imdb": imdb}
 
 for key in datasets:
     if key in ["reddit", "imdb", "collab"]:
@@ -192,11 +192,11 @@ for key in datasets:
         # transform = T.AddLaplacianEigenvectorPE(k=8)
         # print("Encoding Laplacian Eigenvector PE")
 
-        transform = T.RootedRWSubgraph(walk_length=10)
-        print("Encoding Rooted RW Subgraph")
+        # transform = T.RootedRWSubgraph(walk_length=10)
+        # print("Encoding Rooted RW Subgraph")
 
-        # transform = Compose([ShortestPathGenerator(), OneHotEdgeAttr()])
-        # print("Encoding Shortest Path PE")
+        transform = Compose([ShortestPathGenerator(), OneHotEdgeAttr()])
+        print("Encoding Shortest Path PE")
 
         dataset[i] = transform(dataset[i])
     
