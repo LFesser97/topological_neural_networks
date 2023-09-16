@@ -13,6 +13,12 @@ import numpy as np
 from scipy.sparse import csr_matrix
 from scipy.sparse.csgraph import shortest_path
 
+from torch_geometric.data import Data
+from torch_geometric.utils import to_networkx
+from torch_geometric.transforms import BaseTransform
+
+from ricci_curvature.ollivier_ricci import OllivierRicci
+
 
 class ShortestPathGenerator:
     def __init__(self, directed=False):
@@ -46,4 +52,42 @@ class OneHotEdgeAttr:
         offset = torch.cumprod(offset, dim=1)
         x = (x * offset).sum(dim=1)
         data["edge_attr"] = x
+        return data
+    
+
+class LocalCurvatureProfile(BaseTransform):
+    """
+    This class computes the local curvature profile positional encoding for each node in a graph.
+    """
+    def __init__(self, attr_name = 'lcp_pe'):
+        self.attr_name = attr_name
+        
+
+    def forward(self, data: Data) -> Data:
+        graph = to_networkx(data)
+        
+        # compute ORC
+        orc = OllivierRicci(graph, alpha=0, verbose="ERROR")
+        orc.compute_ricci_curvature()
+    
+        # get the neighbors of each node
+        neighbors = [list(graph.neighbors(node)) for node in graph.nodes()]
+    
+        # compute the min, max, mean, std, and median of the ORC for each node
+        min_orc = [min([orc.G.edges[node, neighbor]["ricciCurvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        max_orc = [max([orc.G.edges[node, neighbor]["ricciCurvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        mean_orc = [np.mean([orc.G.edges[node, neighbor]["ricciCurvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        std_orc = [np.std([orc.G.edges[node, neighbor]["ricciCurvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        median_orc = [np.median([orc.G.edges[node, neighbor]["ricciCurvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
+
+        # create a torch.tensor of dimensions (num_nodes, 5) containing the min, max, mean, std, and median of the ORC for each node
+        lcp_pe = torch.tensor([min_orc, max_orc, mean_orc, std_orc, median_orc]).T
+    
+        # add the local degree profile positional encoding to the data object
+        if data.x is not None:
+            data.x = data.x.view(-1, 1) if data.x.dim() == 1 else data.x
+            data.x = torch.cat((data.x, lcp_pe), dim=-1)
+        else:
+            data.x = torch.cat(lcp_pe, dim=-1)
+
         return data
