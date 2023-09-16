@@ -82,9 +82,9 @@ with open(os.path.join(coco_zip_filepath, "coco_superpixels_edge_wt_region_bound
     coco = pickle.load(f)
 """
 
-datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
+# datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
 
-# datasets = {"mutag": mutag, "enzymes": enzymes, "imdb": imdb}
+datasets = {"mutag": mutag, "enzymes": enzymes, "imdb": imdb}
 
 for key in datasets:
     if key in ["reddit", "imdb", "collab"]:
@@ -198,13 +198,18 @@ for key in datasets:
         # transform = Compose([ShortestPathGenerator(), OneHotEdgeAttr()])
         # print("Encoding Shortest Path PE")
 
-        transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
-        print("Encoding Rooted RW Subgraph + Random Walk PE")
+        # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
+        # print("Encoding Rooted RW Subgraph + Random Walk PE")
 
-        # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
-        # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
+        try:
+            transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
+            print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
-        dataset[i] = transform(dataset[i])
+            dataset[i] = transform(dataset[i])
+
+        except:
+            print(f"Graph {i} dropped")
+            drop_datasets.append(i)
     
 
     # drop the graphs that were dropped in the encoding process
