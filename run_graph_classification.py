@@ -204,10 +204,10 @@ for key in datasets:
         # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
         # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
-        transform = T.Compose([LocalCurvatureProfile(), T.AddRandomWalkPE(walk_length=16)])
-        print("Encoding Local Curvature Profile + Random Walk PE")
+        transform = LocalCurvatureProfile()
+        print("Encoding Local Curvature Profile")
 
-        dataset[i] = transform(dataset[i])
+        dataset[i] = transform.forward(dataset[i])
     
 
     # drop the graphs that were dropped in the encoding process
