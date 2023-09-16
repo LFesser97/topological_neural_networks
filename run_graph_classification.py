@@ -4,7 +4,12 @@ from torch_geometric.data import Data
 from torch_geometric.utils import to_networkx, from_networkx, to_dense_adj
 import torch_geometric.transforms as T
 
+# import custom encodings
+from torchvision.transforms import Compose
+from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr
+
 from experiments.graph_classification import Experiment
+
 
 import time
 import tqdm
@@ -188,6 +193,10 @@ for key in datasets:
         # print("Encoding Laplacian Eigenvector PE")
 
         transform = T.RootedRWSubgraph(walk_length=10)
+        print("Encoding Rooted RW Subgraph")
+
+        # transform = Compose([ShortestPathGenerator(), OneHotEdgeAttr()])
+        # print("Encoding Shortest Path PE")
 
         dataset[i] = transform(dataset[i])
     
