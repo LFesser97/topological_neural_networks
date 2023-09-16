@@ -77,9 +77,9 @@ with open(os.path.join(coco_zip_filepath, "coco_superpixels_edge_wt_region_bound
     coco = pickle.load(f)
 """
 
-# datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
+datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
 
-datasets = {"mutag": mutag, "enzymes": enzymes, "imdb": imdb}
+# datasets = {"mutag": mutag, "enzymes": enzymes, "imdb": imdb}
 
 for key in datasets:
     if key in ["reddit", "imdb", "collab"]:
@@ -198,7 +198,7 @@ for key in datasets:
         dataset.pop(i)
 
 
-    """
+    
     print('REWIRING STARTED...')
     start = time.time()
     with tqdm.tqdm(total=len(dataset)) as pbar:
@@ -269,7 +269,7 @@ for key in datasets:
     rewiring_duration = end - start
 
     print('REWIRING COMPLETED...')
-    """
+    
 
 
     
