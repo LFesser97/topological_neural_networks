@@ -138,11 +138,11 @@ class LocalCurvatureProfile(BaseTransform):
         neighbors = [list(graph.neighbors(node)) for node in graph.nodes()]
     
         # compute the min, max, mean, std, and median of the ORC for each node
-        min_afrc_4 = [min([afrc_4.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()]
-        max_afrc_4 = [max([afrc_4.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()]
-        mean_afrc_4 = [np.mean([afrc_4.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()]
-        std_afrc_4 = [np.std([afrc_4.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()]
-        median_afrc_4 = [np.median([afrc_4.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()] 
+        min_afrc_4 = [min([afrc_4.G[node][neighbor]['AFRC_4'] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        max_afrc_4 = [max([afrc_4.G[node][neighbor]['AFRC_4'] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        mean_afrc_4 = [np.mean([afrc_4.G[node][neighbor]['AFRC_4'] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        std_afrc_4 = [np.std([afrc_4.G[node][neighbor]['AFRC_4'] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        median_afrc_4 = [np.median([afrc_4.G[node][neighbor]['AFRC_4'] for neighbor in neighbors[node]]) for node in graph.nodes()] 
                                                                       
         # create a torch.tensor of dimensions (num_nodes, 5) containing the min, max, mean, std, and median of the ORC for each node
         lcp_pe = torch.tensor([min_afrc_4, max_afrc_4, mean_afrc_4, std_afrc_4, median_afrc_4]).T
