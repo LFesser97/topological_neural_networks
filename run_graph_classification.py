@@ -182,7 +182,7 @@ for key in datasets:
 
     drop_datasets = []
 
-    for i in range(org_dataset_len):
+    for i in tqdm(range(org_dataset_len)):
         num_nodes = dataset[i].num_nodes
         eigvecs = np.min([num_nodes, 10]) - 2
 
