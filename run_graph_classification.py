@@ -126,7 +126,7 @@ default_args = AttrDict({
     "eval_every": 1,
     "rewiring": "borf",
     "num_iterations": 3,
-    "patience": 100,
+    "patience": 30,
     "output_dim": 2,
     "alpha": 0.1,
     "eps": 0.001,
