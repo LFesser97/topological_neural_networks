@@ -20,6 +20,9 @@ from torch_geometric.data.datapipes import functional_transform
 
 from GraphRicciCurvature.OllivierRicci import OllivierRicci
 
+from GraphRicciCurvature.FormanRicci import FormanRicci
+from GraphRicciCurvature.FormanRicci4 import FormanRicci4
+
 
 class ShortestPathGenerator:
     def __init__(self, directed=False):
@@ -64,7 +67,7 @@ class LocalCurvatureProfile(BaseTransform):
         self.attr_name = attr_name
         
 
-    def forward(self, data: Data) -> Data:
+    def compute_orc(self, data: Data) -> Data:
         graph = to_networkx(data)
         
         # compute ORC
@@ -84,6 +87,66 @@ class LocalCurvatureProfile(BaseTransform):
         # create a torch.tensor of dimensions (num_nodes, 5) containing the min, max, mean, std, and median of the ORC for each node
         lcp_pe = torch.tensor([min_orc, max_orc, mean_orc, std_orc, median_orc]).T
     
+        # add the local degree profile positional encoding to the data object
+        if data.x is not None:
+            data.x = data.x.view(-1, 1) if data.x.dim() == 1 else data.x
+            data.x = torch.cat((data.x, lcp_pe), dim=-1)
+        else:
+            data.x = torch.cat(lcp_pe, dim=-1)
+
+        return data
+    
+
+    def compute_afrc_3(self, data: Data) -> Data:
+        graph = to_networkx(data)
+        
+        # compute ORC
+        afrc_3 = FormanRicci(graph)
+        afrc_3.compute_ricci_curvature()
+    
+        # get the neighbors of each node
+        neighbors = [list(graph.neighbors(node)) for node in graph.nodes()]
+    
+        # compute the min, max, mean, std, and median of the ORC for each node
+        min_afrc_3 = [min([afrc_3.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        max_afrc_3 = [max([afrc_3.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        mean_afrc_3 = [np.mean([afrc_3.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        std_afrc_3 = [np.std([afrc_3.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        median_afrc_3 = [np.median([afrc_3.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()] 
+                                                                      
+        # create a torch.tensor of dimensions (num_nodes, 5) containing the min, max, mean, std, and median of the ORC for each node
+        lcp_pe = torch.tensor([min_afrc_3, max_afrc_3, mean_afrc_3, std_afrc_3, median_afrc_3]).T
+    
+        # add the local degree profile positional encoding to the data object
+        if data.x is not None:
+            data.x = data.x.view(-1, 1) if data.x.dim() == 1 else data.x
+            data.x = torch.cat((data.x, lcp_pe), dim=-1)
+        else:
+            data.x = torch.cat(lcp_pe, dim=-1)
+
+        return data
+    
+
+    def compute_afrc_4(self, data: Data) -> Data:
+        graph = to_networkx(data)
+        
+        # compute ORC
+        afrc_4 = FormanRicci4(graph)
+        afrc_4.compute_afrc_4()
+    
+        # get the neighbors of each node
+        neighbors = [list(graph.neighbors(node)) for node in graph.nodes()]
+    
+        # compute the min, max, mean, std, and median of the ORC for each node
+        min_afrc_4 = [min([afrc_4.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        max_afrc_4 = [max([afrc_4.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        mean_afrc_4 = [np.mean([afrc_4.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        std_afrc_4 = [np.std([afrc_4.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        median_afrc_4 = [np.median([afrc_4.G[node][neighbor]['AFRC'] for neighbor in neighbors[node]]) for node in graph.nodes()] 
+                                                                      
+        # create a torch.tensor of dimensions (num_nodes, 5) containing the min, max, mean, std, and median of the ORC for each node
+        lcp_pe = torch.tensor([min_afrc_4, max_afrc_4, mean_afrc_4, std_afrc_4, median_afrc_4]).T
+
         # add the local degree profile positional encoding to the data object
         if data.x is not None:
             data.x = data.x.view(-1, 1) if data.x.dim() == 1 else data.x
