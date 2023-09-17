@@ -75,17 +75,12 @@ class LocalCurvatureProfile(BaseTransform):
         neighbors = [list(graph.neighbors(node)) for node in graph.nodes()]
     
         # compute the min, max, mean, std, and median of the ORC for each node
-        for node in graph.nodes():
-            for neighbor in neighbors[node]:
-                print(orc.G.edges[node, neighbor]["ricciCurvature"]["rc_curvature"])
-                print(type(orc.G.edges[node, neighbor]["ricciCurvature"]["rc_curvature"]))
-
-        min_orc = [min([orc.G.edges[node, neighbor]["ricciCurvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
-        max_orc = [max([orc.G.edges[node, neighbor]["ricciCurvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
-        mean_orc = [np.mean([orc.G.edges[node, neighbor]["ricciCurvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
-        std_orc = [np.std([orc.G.edges[node, neighbor]["ricciCurvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
-        median_orc = [np.median([orc.G.edges[node, neighbor]["ricciCurvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
-
+        min_orc = [min([orc.G.edges[node, neighbor]["ricciCurvature"]["rc_curvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        max_orc = [max([orc.G.edges[node, neighbor]["ricciCurvature"]["rc_curvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        mean_orc = [np.mean([orc.G.edges[node, neighbor]["ricciCurvature"]["rc_curvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        std_orc = [np.std([orc.G.edges[node, neighbor]["ricciCurvature"]["rc_curvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
+        median_orc = [np.median([orc.G.edges[node, neighbor]["ricciCurvature"]["rc_curvature"] for neighbor in neighbors[node]]) for node in graph.nodes()]
+                                                                      
         # create a torch.tensor of dimensions (num_nodes, 5) containing the min, max, mean, std, and median of the ORC for each node
         lcp_pe = torch.tensor([min_orc, max_orc, mean_orc, std_orc, median_orc]).T
     
