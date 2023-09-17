@@ -179,10 +179,11 @@ for key in datasets:
     print('ENCODING STARTED...')
 
     org_dataset_len = len(dataset)
-
     drop_datasets = []
 
-    for i in tqdm(range(org_dataset_len)):
+    current_graph = 0
+
+    for i in range(org_dataset_len):
         num_nodes = dataset[i].num_nodes
         eigvecs = np.min([num_nodes, 10]) - 2
 
@@ -205,9 +206,11 @@ for key in datasets:
         # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
         transform = LocalCurvatureProfile()
-        print("Encoding Local Curvature Profile")
+        print(f"Encoding Local Curvature Profile PE for graph {current_graph} of {org_dataset_len}")
 
         dataset[i] = transform.forward(dataset[i])
+
+        current_graph += 1
     
 
     # drop the graphs that were dropped in the encoding process
