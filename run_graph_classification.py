@@ -205,12 +205,18 @@ for key in datasets:
         # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
         # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
-        transform = LocalCurvatureProfile()
-        print(f"Encoding Local Curvature Profile PE for graph {current_graph} of {org_dataset_len}")
+        try:
+            transform = LocalCurvatureProfile()
+            print(f"Encoding Local Curvature Profile PE for graph {current_graph} of {org_dataset_len}")
 
-        dataset[i] = transform.forward(dataset[i])
+            dataset[i] = transform.forward(dataset[i])
 
-        current_graph += 1
+            current_graph += 1
+
+        except:
+            print(f"Graph {current_graph} of {org_dataset_len} dropped due to encoding error")
+            drop_datasets.append(i)
+            current_graph += 1
     
 
     # drop the graphs that were dropped in the encoding process
