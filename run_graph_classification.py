@@ -190,8 +190,8 @@ for key in datasets:
         # transform = T.AddRandomWalkPE(walk_length=16)
         # print("Encoding Random Walk PE")
 
-        transform = T.AddLaplacianEigenvectorPE(k=8)
-        print("Encoding Laplacian Eigenvector PE")
+        # transform = T.AddLaplacianEigenvectorPE(k=8)
+        # print("Encoding Laplacian Eigenvector PE")
 
         # transform = T.RootedRWSubgraph(walk_length=10)
         # print("Encoding Rooted RW Subgraph")
@@ -205,19 +205,19 @@ for key in datasets:
         # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
         # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
-        try:
-            lcp = LocalCurvatureProfile()
-            print(f"Encoding Local Curvature Profile (FRC) for graph {current_graph} of {org_dataset_len}")
+        # try:
+        lcp = LocalCurvatureProfile()
+        print(f"Encoding Local Curvature Profile (FRC) for graph {current_graph} of {org_dataset_len}")
 
-            dataset[i] = lcp.compute_frc(dataset[i])
-            dataset[i] = transform(dataset[i])
+        dataset[i] = lcp.compute_frc(dataset[i])
+            # dataset[i] = transform(dataset[i])
 
-            current_graph += 1
+        current_graph += 1
 
-        except:
-            print(f"Graph {current_graph} of {org_dataset_len} dropped due to encoding error")
-            drop_datasets.append(i)
-            current_graph += 1
+        # except:
+            # print(f"Graph {current_graph} of {org_dataset_len} dropped due to encoding error")
+            # drop_datasets.append(i)
+            # current_graph += 1
     
 
     # drop the graphs that were dropped in the encoding process
