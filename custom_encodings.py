@@ -61,9 +61,9 @@ class OneHotEdgeAttr:
 
 class LocalCurvatureProfile(BaseTransform):
     """
-    This class computes the local curvature profile positional encoding for each node in a graph.
+    This class computes the local curvature profile structural encoding for each node in a graph.
     """
-    def __init__(self, attr_name = 'lcp_pe'):
+    def __init__(self, attr_name = 'lcp_se'):
         self.attr_name = attr_name
         
 
@@ -146,6 +146,36 @@ class LocalCurvatureProfile(BaseTransform):
                                                                       
         # create a torch.tensor of dimensions (num_nodes, 5) containing the min, max, mean, std, and median of the ORC for each node
         lcp_pe = torch.tensor([min_afrc_4, max_afrc_4, mean_afrc_4, std_afrc_4, median_afrc_4]).T
+
+        # add the local degree profile positional encoding to the data object
+        if data.x is not None:
+            data.x = data.x.view(-1, 1) if data.x.dim() == 1 else data.x
+            data.x = torch.cat((data.x, lcp_pe), dim=-1)
+        else:
+            data.x = torch.cat(lcp_pe, dim=-1)
+
+        return data
+    
+
+    def compute_frc(self, data: Data) -> Data:
+        graph = to_networkx(data)
+            
+        # get the neighbors of each node
+        neighbors = [list(graph.neighbors(node)) for node in graph.nodes()]
+
+        # compute the FRC of each edge (u, v) as 4 - deg(u) - deg(v)
+        def frc(u, v):
+            return 4 - len(neighbors[u]) - len(neighbors[v])
+        
+        # compute the min, max, mean, std, and median of the FRC for each node
+        min_frc = [min([frc(node, neighbor) for neighbor in neighbors[node]]) for node in graph.nodes()]
+        max_frc = [max([frc(node, neighbor) for neighbor in neighbors[node]]) for node in graph.nodes()]
+        mean_frc = [np.mean([frc(node, neighbor) for neighbor in neighbors[node]]) for node in graph.nodes()]
+        std_frc = [np.std([frc(node, neighbor) for neighbor in neighbors[node]]) for node in graph.nodes()]
+        median_frc = [np.median([frc(node, neighbor) for neighbor in neighbors[node]]) for node in graph.nodes()]
+
+        # create a torch.tensor of dimensions (num_nodes, 5) containing the min, max, mean, std, and median of the ORC for each node
+        lcp_pe = torch.tensor([min_frc, max_frc, mean_frc, std_frc, median_frc]).T
 
         # add the local degree profile positional encoding to the data object
         if data.x is not None:
