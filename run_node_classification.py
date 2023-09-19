@@ -95,8 +95,7 @@ for key in datasets:
     #print(f"Encoding Local Curvature Profile (FRC)")
 
     #dataset = lcp.compute_orc(dataset)
-    print(type(dataset[0]))
-    dataset = transform(dataset[0])
+    dataset[0] = transform(dataset[0])
 
 
     start = time.time()
