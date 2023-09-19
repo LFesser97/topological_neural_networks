@@ -24,10 +24,10 @@ chameleon = WikipediaNetwork(root="data", name="chameleon")
 cora = Planetoid(root="data", name="cora")
 citeseer = Planetoid(root="data", name="citeseer")
 
-# datasets = {"cornell": cornell, "wisconsin": wisconsin, "texas": texas, 
-#        "chameleon": chameleon, "cora": cora, "citeseer": citeseer}
+datasets = {"cornell": cornell, "wisconsin": wisconsin, "texas": texas, 
+       "chameleon": chameleon, "cora": cora, "citeseer": citeseer}
 
-datasets = {"cora": cora, "citeseer": citeseer}
+# datasets = {"cora": cora, "citeseer": citeseer}
 
 for key in datasets:
     dataset = datasets[key]
