@@ -16,18 +16,40 @@ from torch_geometric.transforms import Compose
 from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatureProfile
 
 
+# positional and structural encodings
+transform = T.AddRandomWalkPE(walk_length=16)
+print("Encoding Random Walk PE")
+
+# transform = T.AddLaplacianEigenvectorPE(k=8)
+# print("Encoding Laplacian Eigenvector PE")
+
+# transform = T.RootedRWSubgraph(walk_length=10)
+# print("Encoding Rooted RW Subgraph")
+
+# transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
+# print("Encoding Rooted RW Subgraph + Random Walk PE")
+
+# transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
+# print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
+
+# lcp = LocalCurvatureProfile()
+# print(f"Encoding Local Curvature Profile (FRC)")
+
+# transform = lcp.compute_orc
+
+
 largest_cc = LargestConnectedComponents()
 cornell = WebKB(root="data", name="Cornell")
 wisconsin = WebKB(root="data", name="Wisconsin")
 texas = WebKB(root="data", name="Texas")
 chameleon = WikipediaNetwork(root="data", name="chameleon")
-cora = Planetoid(root="data", name="cora")
-citeseer = Planetoid(root="data", name="citeseer")
+cora = Planetoid(root="data", name="cora", transform=transform)
+citeseer = Planetoid(root="data", name="citeseer", transform=transform)
 
-datasets = {"cornell": cornell, "wisconsin": wisconsin, "texas": texas, 
-       "chameleon": chameleon, "cora": cora, "citeseer": citeseer}
+# datasets = {"cornell": cornell, "wisconsin": wisconsin, "texas": texas, 
+#       "chameleon": chameleon, "cora": cora, "citeseer": citeseer}
 
-# datasets = {"cora": cora, "citeseer": citeseer}
+datasets = {"cora": cora, "citeseer": citeseer}
 
 for key in datasets:
     dataset = datasets[key]
@@ -72,31 +94,6 @@ for key in datasets:
     accuracies = []
     print(f"TESTING: {key} ({args.rewiring})")
     dataset = datasets[key]
-
-    # transform = T.AddRandomWalkPE(walk_length=16)
-    # print("Encoding Random Walk PE")
-
-    transform = T.AddLaplacianEigenvectorPE(k=8)
-    print("Encoding Laplacian Eigenvector PE")
-
-    # transform = T.RootedRWSubgraph(walk_length=10)
-    # print("Encoding Rooted RW Subgraph")
-
-    # transform = Compose([ShortestPathGenerator(), OneHotEdgeAttr()])
-    # print("Encoding Shortest Path PE")
-
-    # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
-    # print("Encoding Rooted RW Subgraph + Random Walk PE")
-
-    # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
-    # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
-
-    #lcp = LocalCurvatureProfile()
-    #print(f"Encoding Local Curvature Profile (FRC)")
-
-    #dataset = lcp.compute_orc(dataset)
-    dataset[0] = transform(dataset[0])
-
 
     start = time.time()
     if args.rewiring == "fosr":
