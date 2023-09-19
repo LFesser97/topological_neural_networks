@@ -33,7 +33,7 @@ from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatu
 # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
 lcp = LocalCurvatureProfile()
-print(f"Encoding Local Curvature Profile (FRC)")
+print(f"Encoding Local Curvature Profile (ORC)")
 
 transform = lcp.compute_orc
 
