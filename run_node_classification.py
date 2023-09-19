@@ -35,7 +35,7 @@ from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatu
 lcp = LocalCurvatureProfile()
 print(f"Encoding Local Curvature Profile (ORC)")
 
-transform = lcp.compute_orc()
+transform = lcp.compute_orc
 
 
 largest_cc = LargestConnectedComponents()
@@ -95,7 +95,7 @@ for key in datasets:
     print(f"TESTING: {key} ({args.rewiring})")
     dataset = datasets[key]
 
-
+    """
     start = time.time()
     if args.rewiring == "fosr":
         edge_index, edge_type, _ = fosr.edge_rewire(dataset.data.edge_index.numpy(), num_iterations=args.num_iterations)
@@ -151,6 +151,7 @@ for key in datasets:
                 is_undirected=True, curvature=curvature_type)
     end = time.time()
     rewiring_duration = end - start
+    """
 
     # print(rewiring.spectral_gap(to_networkx(dataset.data, to_undirected=True)))
     start = time.time()
