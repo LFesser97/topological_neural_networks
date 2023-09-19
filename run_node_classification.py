@@ -95,6 +95,7 @@ for key in datasets:
     print(f"TESTING: {key} ({args.rewiring})")
     dataset = datasets[key]
 
+    """
     start = time.time()
     if args.rewiring == "fosr":
         edge_index, edge_type, _ = fosr.edge_rewire(dataset.data.edge_index.numpy(), num_iterations=args.num_iterations)
@@ -118,7 +119,6 @@ for key in datasets:
                 batch_remove=args.borf_batch_remove,
                 dataset_name=key,
                 graph_index=0)
-        print(len(dataset.data.edge_type))
     elif args.rewiring == "barf_3":
         print(f"[INFO] BORF hyper-parameter : num_iterations = {args.num_iterations}")
         print(f"[INFO] BORF hyper-parameter : batch_add = {args.borf_batch_add}")
@@ -151,6 +151,7 @@ for key in datasets:
                 is_undirected=True, curvature=curvature_type)
     end = time.time()
     rewiring_duration = end - start
+    """
 
     # print(rewiring.spectral_gap(to_networkx(dataset.data, to_undirected=True)))
     start = time.time()
@@ -177,7 +178,7 @@ for key in datasets:
         "avg_accuracy": np.mean(accuracies),
         "ci":  2 * np.std(accuracies)/(args.num_trials ** 0.5),
         "run_duration" : run_duration,
-        "rewiring_duration" : rewiring_duration
+        #"rewiring_duration" : rewiring_duration
     })
     results_df = pd.DataFrame(results)
     with open(f'results/node_classification_{args.layer_type}_{args.rewiring}.csv', 'a') as f:
