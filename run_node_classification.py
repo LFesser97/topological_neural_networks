@@ -26,16 +26,16 @@ from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatu
 # transform = T.RootedRWSubgraph(walk_length=10)
 # print("Encoding Rooted RW Subgraph")
 
-# transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
-# print("Encoding Rooted RW Subgraph + Random Walk PE")
+transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
+print("Encoding Rooted RW Subgraph + Random Walk PE")
 
 # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
 # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
-lcp = LocalCurvatureProfile()
-print(f"Encoding Local Curvature Profile (ORC)")
+#lcp = LocalCurvatureProfile()
+#print(f"Encoding Local Curvature Profile (ORC)")
 
-transform = lcp.compute_orc
+#transform = lcp.compute_orc
 
 
 largest_cc = LargestConnectedComponents()
@@ -94,6 +94,8 @@ for key in datasets:
     accuracies = []
     print(f"TESTING: {key} ({args.rewiring})")
     dataset = datasets[key]
+
+
 
     """
     start = time.time()
