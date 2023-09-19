@@ -20,8 +20,8 @@ from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatu
 # transform = T.AddRandomWalkPE(walk_length=16)
 # print("Encoding Random Walk PE")
 
-# transform = T.AddLaplacianEigenvectorPE(k=8)
-# print("Encoding Laplacian Eigenvector PE")
+transform = T.AddLaplacianEigenvectorPE(k=8)
+print("Encoding Laplacian Eigenvector PE")
 
 # transform = T.RootedRWSubgraph(walk_length=10)
 # print("Encoding Rooted RW Subgraph")
@@ -29,8 +29,8 @@ from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatu
 # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
 # print("Encoding Rooted RW Subgraph + Random Walk PE")
 
-transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
-print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
+# transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
+# print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
 #lcp = LocalCurvatureProfile()
 #print(f"Encoding Local Curvature Profile (ORC)")
@@ -96,8 +96,6 @@ for key in datasets:
     dataset = datasets[key]
 
 
-
-    """
     start = time.time()
     if args.rewiring == "fosr":
         edge_index, edge_type, _ = fosr.edge_rewire(dataset.data.edge_index.numpy(), num_iterations=args.num_iterations)
@@ -153,7 +151,6 @@ for key in datasets:
                 is_undirected=True, curvature=curvature_type)
     end = time.time()
     rewiring_duration = end - start
-    """
 
     # print(rewiring.spectral_gap(to_networkx(dataset.data, to_undirected=True)))
     start = time.time()
