@@ -59,6 +59,7 @@ class OneHotEdgeAttr:
         return data
     
 
+@functional_transform('local_curvature_profile')
 class LocalCurvatureProfile(BaseTransform):
     """
     This class computes the local curvature profile structural encoding for each node in a graph.
