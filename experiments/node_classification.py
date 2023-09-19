@@ -40,7 +40,7 @@ class Experiment:
         self.validation_mask = validation_mask
         self.test_mask = test_mask
         self.loss_fn = torch.nn.CrossEntropyLoss()
-        self.args.input_dim = self.dataset[0].x.shape[1] - 5
+        self.args.input_dim = self.dataset[0].x.shape[1]
         self.args.output_dim = torch.amax(self.dataset[0].y).item() + 1
         self.num_nodes = self.dataset[0].x.size(axis=0)
 
