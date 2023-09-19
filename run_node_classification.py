@@ -20,11 +20,11 @@ from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatu
 # transform = T.AddRandomWalkPE(walk_length=16)
 # print("Encoding Random Walk PE")
 
-transform = T.AddLaplacianEigenvectorPE(k=8)
-print("Encoding Laplacian Eigenvector PE")
+# transform = T.AddLaplacianEigenvectorPE(k=8)
+# print("Encoding Laplacian Eigenvector PE")
 
-# transform = T.RootedRWSubgraph(walk_length=10)
-# print("Encoding Rooted RW Subgraph")
+transform = T.RootedRWSubgraph(walk_length=10)
+print("Encoding Rooted RW Subgraph")
 
 # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
 # print("Encoding Rooted RW Subgraph + Random Walk PE")
