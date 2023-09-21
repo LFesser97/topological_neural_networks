@@ -82,11 +82,14 @@ with open(os.path.join(coco_zip_filepath, "coco_superpixels_edge_wt_region_bound
     coco = pickle.load(f)
 """
 
-# load enzymes_encoded.pt from "data/enzymes_encoded.pt"
-# enzymes_encoded = torch.load("data/enzymes_encoded.pt")
-# print("ENZYMES ENCODED LOADED")
+# load encoded datasets
+imdb_encoded = torch.load("data/imdb_encoded.pt")
+print("IMDB ENCODED LOADED")
 
-datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
+proteins_encoded = torch.load("data/proteins_encoded.pt")
+print("IMDB ENCODED LOADED")
+
+datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins_encoded, "imdb": imdb_encoded}
 
 # datasets = {"mutag": mutag, "enzymes": enzymes, "imdb": imdb}
 
@@ -179,6 +182,7 @@ for key in datasets:
     else:
         dataset = datasets[key]
 
+    """
     # dataset encodings
     print('ENCODING STARTED...')
 
@@ -230,6 +234,7 @@ for key in datasets:
 
     # save the dataset to a file in the data folder
     torch.save(dataset, f"data/{key}_encoded.pt")
+    """
 
 
     """
