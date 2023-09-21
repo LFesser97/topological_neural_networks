@@ -224,6 +224,9 @@ for key in datasets:
     for i in sorted(drop_datasets, reverse=True):
         dataset.pop(i)
 
+    # save the dataset to a file in the data folder
+    torch.save(dataset, f"data/{key}_encoded.pt")
+
 
     """
     print('REWIRING STARTED...')
