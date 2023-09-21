@@ -207,9 +207,9 @@ for key in datasets:
 
         try:
             lcp = LocalCurvatureProfile()
-            print(f"Encoding Local Curvature Profile (FRC) for graph {current_graph} of {org_dataset_len}")
+            print(f"Encoding Local Curvature Profile (ORC) for graph {current_graph} of {org_dataset_len}")
 
-            dataset[i] = lcp.compute_frc(dataset[i])
+            dataset[i] = lcp.compute_orc(dataset[i])
             # dataset[i] = transform(dataset[i])
 
             current_graph += 1
