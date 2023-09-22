@@ -83,13 +83,13 @@ with open(os.path.join(coco_zip_filepath, "coco_superpixels_edge_wt_region_bound
 """
 
 # load encoded datasets
-imdb_encoded = torch.load("data/imdb_encoded.pt")
-print("IMDB ENCODED LOADED")
+# imdb_encoded = torch.load("data/imdb_encoded.pt")
+# print("IMDB ENCODED LOADED")
 
-proteins_encoded = torch.load("data/proteins_encoded.pt")
-print("IMDB ENCODED LOADED")
+# proteins_encoded = torch.load("data/proteins_encoded.pt")
+# print("IMDB ENCODED LOADED")
 
-datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins_encoded, "imdb": imdb_encoded}
+datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
 
 # datasets = {"mutag": mutag, "enzymes": enzymes, "imdb": imdb}
 
@@ -182,7 +182,7 @@ for key in datasets:
     else:
         dataset = datasets[key]
 
-    """
+
     # dataset encodings
     print('ENCODING STARTED...')
 
@@ -204,6 +204,9 @@ for key in datasets:
         # transform = T.RootedRWSubgraph(walk_length=10)
         # print("Encoding Rooted RW Subgraph")
 
+        transform = T.LocalDegreeProfile()
+        print("Encoding Local Degree Profile")
+
         # transform = Compose([ShortestPathGenerator(), OneHotEdgeAttr()])
         # print("Encoding Shortest Path PE")
 
@@ -214,11 +217,11 @@ for key in datasets:
         # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
         try:
-            lcp = LocalCurvatureProfile()
-            print(f"Encoding Local Curvature Profile (ORC) for graph {current_graph} of {org_dataset_len}")
+            # lcp = LocalCurvatureProfile()
+            # print(f"Encoding Local Curvature Profile (ORC) for graph {current_graph} of {org_dataset_len}")
 
-            dataset[i] = lcp.compute_orc(dataset[i])
-            # dataset[i] = transform(dataset[i])
+            # dataset[i] = lcp.compute_orc(dataset[i])
+            dataset[i] = transform(dataset[i])
 
             current_graph += 1
 
@@ -233,8 +236,7 @@ for key in datasets:
         dataset.pop(i)
 
     # save the dataset to a file in the data folder
-    torch.save(dataset, f"data/{key}_encoded.pt")
-    """
+    # torch.save(dataset, f"data/{key}_encoded.pt")
 
 
     """
