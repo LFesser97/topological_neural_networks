@@ -202,7 +202,7 @@ class LocalCurvatureProfile(BaseTransform):
         return data
     
 
-@functional_transform('local_curvature_profile')
+@functional_transform('alt_local_curvature_profile')
 class AltLocalCurvatureProfile(BaseTransform):
     """
     This class computes the local curvature profile structural encoding for each node in a graph.
