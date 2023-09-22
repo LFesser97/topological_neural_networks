@@ -59,7 +59,13 @@ class Experiment:
                 self.args.num_relations = 1
             else:
                 self.args.num_relations = 2
-        self.model = GNN(self.args).to(self.args.device)
+
+        # if self.layer_type == "R-GAT", set self.model to GAT
+        if self.args.layer_type == "R-GAT"
+            self.model = GAT(self.args).to(self.args.device)
+
+        else:
+            self.model = GNN(self.args).to(self.args.device)
        
         if self.test_dataset is None:
             dataset_size = len(self.dataset)
