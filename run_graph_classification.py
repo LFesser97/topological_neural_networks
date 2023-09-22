@@ -204,8 +204,8 @@ for key in datasets:
         # transform = T.RootedRWSubgraph(walk_length=10)
         # print("Encoding Rooted RW Subgraph")
 
-        transform = T.LocalDegreeProfile()
-        print("Encoding Local Degree Profile")
+        # transform = T.LocalDegreeProfile()
+        # print("Encoding Local Degree Profile")
 
         # transform = Compose([ShortestPathGenerator(), OneHotEdgeAttr()])
         # print("Encoding Shortest Path PE")
@@ -217,11 +217,11 @@ for key in datasets:
         # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
         try:
-            # lcp = LocalCurvatureProfile()
-            # print(f"Encoding Local Curvature Profile (ORC) for graph {current_graph} of {org_dataset_len}")
+            lcp = LocalCurvatureProfile()
+            print(f"Encoding Local Curvature Profile (ORC) for graph {current_graph} of {org_dataset_len}")
 
-            # dataset[i] = lcp.compute_orc(dataset[i])
-            dataset[i] = transform(dataset[i])
+            dataset[i] = lcp.compute_afrc_3(dataset[i])
+            # dataset[i] = transform(dataset[i])
 
             current_graph += 1
 
