@@ -13,7 +13,7 @@ class RGATConv(torch.nn.Module):
         self.self_loop_conv = torch.nn.Linear(in_features, out_features)
         convs = []
         for i in range(self.num_relations):
-            convs.append(SuperGATConv(in_features, out_features))
+            convs.append(GatedGraphConv(in_features, out_features))
         self.convs = ModuleList(convs)
     def forward(self, x, edge_index, edge_type):
         x_new = self.self_loop_conv(x)
@@ -83,7 +83,7 @@ class GNN(torch.nn.Module):
         x, edge_index, ptr, batch = graph.x, graph.edge_index, graph.ptr, graph.batch
         x = x.float()
         for i, layer in enumerate(self.layers):
-            if self.layer_type in ["R-GCN", "R-GIN", "FiLM"]:
+            if self.layer_type in ["R-GCN", "R-GAT", "R-GIN", "FiLM"]:
                 x_new = layer(x, edge_index, edge_type=graph.edge_type)
             else:
                 x_new = layer(x, edge_index)
