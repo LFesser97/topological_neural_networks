@@ -2,7 +2,8 @@ import torch
 import torch.nn as nn
 from measure_smoothing import dirichlet_normalized
 from torch.nn import ModuleList, Dropout, ReLU
-from torch_geometric.nn import GCNConv, RGCNConv, SAGEConv, GatedGraphConv, GINConv, FiLMConv, global_mean_pool, CuGraphGATConv
+from torch_geometric.nn import GCNConv, RGCNConv, SAGEConv, GatedGraphConv, GINConv, FiLMConv, global_mean_pool, GATConv
+from torch_geometric.nn.conv import CuGraphGATConv
 
 class RGATConv(torch.nn.Module):
     def __init__(self, in_features, out_features, num_relations):
