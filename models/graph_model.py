@@ -83,7 +83,7 @@ class GNN(torch.nn.Module):
         x, edge_index, ptr, batch = graph.x, graph.edge_index, graph.ptr, graph.batch
         x = x.float()
         for i, layer in enumerate(self.layers):
-            if self.layer_type in ["R-GCN", "R-GIN", "FiLM"]: # ["R-GCN", "R-GAT", "R-GIN", "FiLM"]
+            if self.layer_type in ["R-GCN", "R-GAT", "R-GIN", "FiLM"]:
                 x_new = layer(x, edge_index, edge_type=graph.edge_type)
             else:
                 x_new = layer(x, edge_index)
