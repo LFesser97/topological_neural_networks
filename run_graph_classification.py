@@ -216,6 +216,7 @@ for key in datasets:
         # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
         # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
+        """
         try:
             lcp = AltLocalCurvatureProfile()
             print(f"Encoding Local Curvature Profile (ORC) for graph {current_graph} of {org_dataset_len}")
@@ -229,6 +230,7 @@ for key in datasets:
             print(f"Graph {current_graph} of {org_dataset_len} dropped due to encoding error")
             drop_datasets.append(i)
             current_graph += 1
+        """
         
     
 
