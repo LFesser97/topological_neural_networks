@@ -6,7 +6,7 @@ import torch_geometric.transforms as T
 
 # import custom encodings
 from torchvision.transforms import Compose
-from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatureProfile
+from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatureProfile, AltLocalCurvatureProfile
 
 from experiments.graph_classification import Experiment
 
@@ -217,7 +217,7 @@ for key in datasets:
         # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
         try:
-            lcp = LocalCurvatureProfile()
+            lcp = AltLocalCurvatureProfile()
             print(f"Encoding Local Curvature Profile (ORC) for graph {current_graph} of {org_dataset_len}")
 
             dataset[i] = lcp.compute_afrc_3(dataset[i])

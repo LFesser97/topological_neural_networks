@@ -200,3 +200,53 @@ class LocalCurvatureProfile(BaseTransform):
             data.x = torch.cat(lcp_pe, dim=-1)
 
         return data
+    
+
+@functional_transform('local_curvature_profile')
+class AltLocalCurvatureProfile(BaseTransform):
+    """
+    This class computes the local curvature profile structural encoding for each node in a graph.
+    """
+    def __init__(self, attr_name = 'alt_lcp_se'):
+        self.attr_name = attr_name
+        
+
+    def compute_orc(self, data: Data) -> Data:
+        graph = to_networkx(data)
+        
+        # compute ORC
+        orc = OllivierRicci(graph, alpha=0, verbose="ERROR")
+        orc.compute_ricci_curvature()
+    
+        # get the neighbors of each node
+        neighbors = [list(graph.neighbors(node)) for node in graph.nodes()]
+    
+        # for each node, order the ORC of its neighbors in ascending order
+        ordered_orc = []
+        for node in graph.nodes():
+            if len(neighbors[node]) > 0:
+                ordered_orc.append(sorted([orc.G.edges[node, neighbor]["ricciCurvature"]["rc_curvature"] for neighbor in neighbors[node]]))
+            else:
+                ordered_orc.append([0])
+
+        # crop the ordered ORC to the first 3 and the last 2 values, and pad with 0s if necessary
+        cropped_orc = []
+        for node in graph.nodes():
+            if len(ordered_orc[node]) > 5:
+                cropped_orc.append(ordered_orc[node][:3] + ordered_orc[node][-2:])
+            elif len(ordered_orc[node]) < 5:
+                cropped_orc.append(ordered_orc[node] + [0] * (5 - len(ordered_orc[node])))
+            else:
+                cropped_orc.append(ordered_orc[node])
+
+        # create a torch.tensor of dimensions (num_nodes, 5) containing the ordered ORC for each node
+        alt_lcp_pe = torch.tensor(cropped_orc)
+    
+        # add the local degree profile positional encoding to the data object
+        if data.x is not None:
+            data.x = data.x.view(-1, 1) if data.x.dim() == 1 else data.x
+            data.x = torch.cat((data.x, alt_lcp_pe), dim=-1)
+        else:
+            data.x = torch.cat(alt_lcp_pe, dim=-1)
+
+        return data
