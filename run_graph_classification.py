@@ -207,22 +207,19 @@ for key in datasets:
         # transform = T.LocalDegreeProfile()
         # print("Encoding Local Degree Profile")
 
-        # transform = Compose([ShortestPathGenerator(), OneHotEdgeAttr()])
-        # print("Encoding Shortest Path PE")
-
         # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
         # print("Encoding Rooted RW Subgraph + Random Walk PE")
 
-        # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
-        # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
+        transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
+        print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
         
         try:
-            lcp = LocalCurvatureProfile()
-            print(f"Encoding Local Curvature Profile (ORC) for graph {current_graph} of {org_dataset_len}")
+            # lcp = LocalCurvatureProfile()
+            # print(f"Encoding Local Curvature Profile (ORC) for graph {current_graph} of {org_dataset_len}")
 
-            dataset[i] = lcp.compute_orc(dataset[i])
-            # dataset[i] = transform(dataset[i])
+            # dataset[i] = lcp.compute_orc(dataset[i])
+            dataset[i] = transform(dataset[i])
 
             current_graph += 1
 
