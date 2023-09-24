@@ -89,9 +89,9 @@ with open(os.path.join(coco_zip_filepath, "coco_superpixels_edge_wt_region_bound
 # proteins_encoded = torch.load("data/proteins_encoded.pt")
 # print("IMDB ENCODED LOADED")
 
-datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
+# datasets = {"mutag": mutag, "enzymes": enzymes, "proteins": proteins, "imdb": imdb}
 
-# datasets = {"mutag": mutag, "enzymes": enzymes, "imdb": imdb}
+datasets = {"mutag": mutag, "enzymes": enzymes, "imdb": imdb}
 
 for key in datasets:
     if key in ["reddit", "imdb", "collab"]:
@@ -198,8 +198,8 @@ for key in datasets:
         # transform = T.AddRandomWalkPE(walk_length=16)
         # print("Encoding Random Walk PE")
 
-        # transform = T.AddLaplacianEigenvectorPE(k=8)
-        # print("Encoding Laplacian Eigenvector PE")
+        transform = T.AddLaplacianEigenvectorPE(k=8)
+        print("Encoding Laplacian Eigenvector PE")
 
         # transform = T.RootedRWSubgraph(walk_length=10)
         # print("Encoding Rooted RW Subgraph")
@@ -216,13 +216,13 @@ for key in datasets:
         # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
         # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
-        """
+        
         try:
-            lcp = AltLocalCurvatureProfile()
-            print(f"Encoding Local Curvature Profile (ORC) for graph {current_graph} of {org_dataset_len}")
+            # lcp = AltLocalCurvatureProfile()
+            # print(f"Encoding Local Curvature Profile (ORC) for graph {current_graph} of {org_dataset_len}")
 
-            dataset[i] = lcp.compute_orc(dataset[i])
-            # dataset[i] = transform(dataset[i])
+            # dataset[i] = lcp.compute_orc(dataset[i])
+            dataset[i] = transform(dataset[i])
 
             current_graph += 1
 
@@ -230,7 +230,7 @@ for key in datasets:
             print(f"Graph {current_graph} of {org_dataset_len} dropped due to encoding error")
             drop_datasets.append(i)
             current_graph += 1
-        """
+        
         
     
 
