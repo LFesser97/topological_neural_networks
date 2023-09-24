@@ -201,8 +201,8 @@ for key in datasets:
         # transform = T.AddLaplacianEigenvectorPE(k=8)
         # print("Encoding Laplacian Eigenvector PE")
 
-        transform = T.RootedRWSubgraph(walk_length=10)
-        print("Encoding Rooted RW Subgraph")
+        # transform = T.RootedRWSubgraph(walk_length=10)
+        # print("Encoding Rooted RW Subgraph")
 
         # transform = T.LocalDegreeProfile()
         # print("Encoding Local Degree Profile")
@@ -218,11 +218,11 @@ for key in datasets:
 
         
         try:
-            # lcp = AltLocalCurvatureProfile()
-            # print(f"Encoding Local Curvature Profile (ORC) for graph {current_graph} of {org_dataset_len}")
+            lcp = LocalCurvatureProfile()
+            print(f"Encoding Local Curvature Profile (ORC) for graph {current_graph} of {org_dataset_len}")
 
-            # dataset[i] = lcp.compute_orc(dataset[i])
-            dataset[i] = transform(dataset[i])
+            dataset[i] = lcp.compute_orc(dataset[i])
+            # dataset[i] = transform(dataset[i])
 
             current_graph += 1
 
