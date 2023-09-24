@@ -195,11 +195,11 @@ for key in datasets:
         num_nodes = dataset[i].num_nodes
         eigvecs = np.min([num_nodes, 10]) - 2
 
-        # transform = T.AddRandomWalkPE(walk_length=16)
-        # print("Encoding Random Walk PE")
+        transform = T.AddRandomWalkPE(walk_length=16)
+        print("Encoding Random Walk PE")
 
-        transform = T.AddLaplacianEigenvectorPE(k=8)
-        print("Encoding Laplacian Eigenvector PE")
+        # transform = T.AddLaplacianEigenvectorPE(k=8)
+        # print("Encoding Laplacian Eigenvector PE")
 
         # transform = T.RootedRWSubgraph(walk_length=10)
         # print("Encoding Rooted RW Subgraph")
