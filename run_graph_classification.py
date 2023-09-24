@@ -207,11 +207,11 @@ for key in datasets:
         # transform = T.LocalDegreeProfile()
         # print("Encoding Local Degree Profile")
 
-        # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
-        # print("Encoding Rooted RW Subgraph + Random Walk PE")
+        transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
+        print("Encoding Rooted RW Subgraph + Random Walk PE")
 
-        transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
-        print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
+        # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
+        # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
         
         try:
