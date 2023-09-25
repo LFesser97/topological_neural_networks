@@ -195,8 +195,8 @@ for key in datasets:
         num_nodes = dataset[i].num_nodes
         eigvecs = np.min([num_nodes, 10]) - 2
 
-        transform = T.AddRandomWalkPE(walk_length=16)
-        print("Encoding Random Walk PE")
+        # transform = T.AddRandomWalkPE(walk_length=16)
+        # print("Encoding Random Walk PE")
 
         # transform = T.AddLaplacianEigenvectorPE(k=8)
         # print("Encoding Laplacian Eigenvector PE")
@@ -213,7 +213,7 @@ for key in datasets:
         # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
         # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
-        
+        """
         try:
             # lcp = LocalCurvatureProfile()
             # print(f"Encoding Local Curvature Profile (ORC) for graph {current_graph} of {org_dataset_len}")
@@ -227,6 +227,7 @@ for key in datasets:
             print(f"Graph {current_graph} of {org_dataset_len} dropped due to encoding error")
             drop_datasets.append(i)
             current_graph += 1
+        """
     
 
     # drop the graphs that were dropped in the encoding process
