@@ -236,7 +236,7 @@ for key in datasets:
     # save the dataset to a file in the data folder
     # torch.save(dataset, f"data/{key}_encoded.pt")
 
-
+    """
     print('REWIRING STARTED...')
     start = time.time()
     with tqdm.tqdm(total=len(dataset)) as pbar:
@@ -307,6 +307,7 @@ for key in datasets:
     rewiring_duration = end - start
 
     print('REWIRING COMPLETED...')
+    """
 
     
     #spectral_gap = average_spectral_gap(dataset)
