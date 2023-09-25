@@ -81,7 +81,7 @@ class GNN(torch.nn.Module):
     def forward(self, graph):
         x, edge_index = graph.x, graph.edge_index
         for i, layer in enumerate(self.layers):
-            if self.layer_type in ["R-GCN", "R-GIN"]:
+            if self.layer_type in ["R-GCN", "R-GIN", "R-GAT"]:
                 x = layer(x, edge_index, edge_type=graph.edge_type)
             else:
                 x = layer(x, edge_index)
