@@ -101,7 +101,7 @@ class LocalCurvatureProfile(BaseTransform):
                                                                       
         # create a torch.tensor of dimensions (num_nodes, 5) containing the min, max, mean, std, and median of the ORC for each node
         # lcp_pe = torch.tensor([min_orc, max_orc, mean_orc, std_orc, median_orc]).T
-        lcp_pe = torch.tensor([min_orc, max_orc]).T
+        lcp_pe = torch.tensor([min_orc, max_orc, mean_orc, std_orc, median_orc]).T
     
         # add the local degree profile positional encoding to the data object
         if data.x is not None:
@@ -111,6 +111,50 @@ class LocalCurvatureProfile(BaseTransform):
             data.x = torch.cat(lcp_pe, dim=-1)
 
         return data
+    
+
+    def compute_orc_approx(self, data: Data) -> Data:
+        graph = to_networkx(data)
+            
+        # get the neighbors of each node
+        neighbors = [list(graph.neighbors(node)) for node in graph.nodes()]
+    
+        # compute the min, max, mean, std, and median of the ORC for each node
+        min_orc = []
+        max_orc = []
+
+        def compute_upper_bound(node_1, node_2):
+            deg_node_1 = len(neighbors[node_1])
+            deg_node_2 = len(neighbors[node_2])
+            num_triangles = len([neighbor for neighbor in neighbors[node_1] if neighbor in neighbors[node_2]])
+            return num_triangles / np.max([deg_node_1, deg_node_2])
+
+        def compute_lower_bound(node_1, node_2):
+            deg_node_1 = len(neighbors[node_1])
+            deg_node_2 = len(neighbors[node_2])
+            num_triangles = len([neighbor for neighbor in neighbors[node_1] if neighbor in neighbors[node_2]])
+            return -np.max([0, 1 - 1/deg_node_1 - 1/deg_node_2 - num_triangles/np.min([deg_node_1, deg_node_2])]) - np.max([0, 1 - 1/deg_node_1 - 1/deg_node_2 - num_triangles/np.max([deg_node_1, deg_node_2])]) + num_triangles/np.max([deg_node_1, deg_node_2])
+
+        for node in graph.nodes():
+            if len(neighbors[node]) > 0:
+                min_orc.append(min([compute_lower_bound(node, neighbor) for neighbor in neighbors[node]]))
+                max_orc.append(max([compute_upper_bound(node, neighbor) for neighbor in neighbors[node]]))
+            else:
+                min_orc.append(0)
+                max_orc.append(0)
+                                                                      
+        # create a torch.tensor of dimensions (num_nodes, 5) containing the min, max, mean, std, and median of the ORC for each node
+        # lcp_pe = torch.tensor([min_orc, max_orc, mean_orc, std_orc, median_orc]).T
+        lcp_pe = torch.tensor([min_orc, max_orc]).T
+    
+        # add the local degree profile positional encoding to the data object
+        if data.x is not None:
+            data.x = data.x.view(-1, 1) if data.x.dim() == 1 else data.x
+            data.x = torch.cat((data.x, lcp_pe), dim=-1)
+        else:
+            data.x = torch.cat(lcp_pe, dim=-1)
+
+        return data    
     
 
     def compute_afrc_3(self, data: Data) -> Data:
