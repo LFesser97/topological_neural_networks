@@ -82,7 +82,9 @@ class GNN(torch.nn.Module):
         x, edge_index = graph.x, graph.edge_index
         for i, layer in enumerate(self.layers):
             if self.layer_type in ["R-GCN", "R-GIN", "R-GAT"]:
-                x = layer(x, edge_index, edge_type=graph.edge_type)
+                print("Type of graph", type(graph))
+                print("graph object", graph)
+                x = layer(x, edge_index, edge_type=graph[0].edge_type)
             else:
                 x = layer(x, edge_index)
             if i != self.num_layers - 1:
