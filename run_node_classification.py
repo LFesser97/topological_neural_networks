@@ -35,7 +35,7 @@ from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatu
 lcp = LocalCurvatureProfile()
 print(f"Encoding Local Curvature Profile (ORC)")
 
-transform = lcp.compute_orc
+transform = lcp.compute_orc_approx
 
 
 largest_cc = LargestConnectedComponents()
