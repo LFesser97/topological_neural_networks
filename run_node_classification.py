@@ -20,8 +20,8 @@ from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatu
 # transform = T.AddRandomWalkPE(walk_length=16)
 # print("Encoding Random Walk PE")
 
-# transform = T.AddLaplacianEigenvectorPE(k=8)
-# print("Encoding Laplacian Eigenvector PE")
+transform = T.AddLaplacianEigenvectorPE(k=8)
+print("Encoding Laplacian Eigenvector PE")
 
 # transform = T.RootedRWSubgraph(walk_length=10)
 # print("Encoding Rooted RW Subgraph")
@@ -32,10 +32,10 @@ from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatu
 # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
 # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
-lcp = LocalCurvatureProfile()
-print(f"Encoding Local Curvature Profile (ORC)")
+# lcp = LocalCurvatureProfile()
+# print(f"Encoding Local Curvature Profile (ORC)")
 
-transform = lcp.compute_orc_approx
+# transform = lcp.compute_orc_approx
 
 
 largest_cc = LargestConnectedComponents()
