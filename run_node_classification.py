@@ -42,12 +42,12 @@ largest_cc = LargestConnectedComponents()
 cornell = WebKB(root="data", name="Cornell", transform=transform)
 wisconsin = WebKB(root="data", name="Wisconsin", transform=transform)
 texas = WebKB(root="data", name="Texas", transform=transform)
-chameleon = WikipediaNetwork(root="data", name="chameleon", transform=transform)
-cora = Planetoid(root="data", name="cora", transform=transform)
-citeseer = Planetoid(root="data", name="citeseer", transform=transform)
+#chameleon = WikipediaNetwork(root="data", name="chameleon", transform=transform)
+#cora = Planetoid(root="data", name="cora", transform=transform)
+#citeseer = Planetoid(root="data", name="citeseer", transform=transform)
 
-datasets = {"cornell": cornell, "wisconsin": wisconsin, "texas": texas, 
-            "chameleon": chameleon, "cora": cora, "citeseer": citeseer}
+datasets = {"cornell": cornell, "wisconsin": wisconsin, "texas": texas}
+#            "chameleon": chameleon, "cora": cora, "citeseer": citeseer}
 
 for key in datasets:
     dataset = datasets[key]
