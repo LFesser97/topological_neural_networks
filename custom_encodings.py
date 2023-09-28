@@ -102,6 +102,10 @@ class LocalCurvatureProfile(BaseTransform):
         # create a torch.tensor of dimensions (num_nodes, 5) containing the min, max, mean, std, and median of the ORC for each node
         # lcp_pe = torch.tensor([min_orc, max_orc, mean_orc, std_orc, median_orc]).T
         lcp_pe = torch.tensor([min_orc, max_orc, mean_orc, std_orc, median_orc]).T
+
+        # move lcps to the GPU if available
+        if torch.cuda.is_available():
+            lcp_pe = lcp_pe.cuda()
     
         # add the local degree profile positional encoding to the data object
         if data.x is not None:
