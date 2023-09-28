@@ -119,7 +119,6 @@ class LocalCurvatureProfile(BaseTransform):
         # get the neighbors of each node
         neighbors = [list(graph.neighbors(node)) for node in graph.nodes()]
     
-        # compute the min, max, mean, std, and median of the ORC for each node
         min_orc = []
         max_orc = []
 
@@ -143,8 +142,6 @@ class LocalCurvatureProfile(BaseTransform):
                 min_orc.append(0)
                 max_orc.append(0)
                                                                       
-        # create a torch.tensor of dimensions (num_nodes, 5) containing the min, max, mean, std, and median of the ORC for each node
-        # lcp_pe = torch.tensor([min_orc, max_orc, mean_orc, std_orc, median_orc]).T
         lcp_pe = torch.tensor([min_orc, max_orc]).T
     
         # add the local degree profile positional encoding to the data object
