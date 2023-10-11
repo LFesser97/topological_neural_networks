@@ -68,10 +68,10 @@ def log_to_file(message, filename="results/node_classification.txt"):
     file.close()
 
 default_args = AttrDict({
-    "dropout": 0.2, # 0.5
-    "num_layers": 5, # 3
-    "hidden_dim": 512, # 128
-    "learning_rate": 1e-5, # 1e-3
+    "dropout": 0.2,
+    "num_layers": 5,
+    "hidden_dim": 512,
+    "learning_rate": 1e-3,
     "layer_type": "R-GCN",
     "display": True,
     "num_trials": 10,

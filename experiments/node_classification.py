@@ -10,7 +10,7 @@ from math import inf
 from models.node_model import GCN
 
 default_args = AttrDict(
-    {"learning_rate": 1e-5, # 1e-3
+    {"learning_rate": 1e-3,
     "max_epochs": 1000000,
     "display": True,
     "device": None,
@@ -18,14 +18,14 @@ default_args = AttrDict(
     "stopping_criterion": "validation",
     "stopping_threshold": 1.01,
     "patience": 50,
-    "train_fraction": 0.5, # 0.6
-    "validation_fraction": 0.25, # 0.2
-    "test_fraction": 0.25, # 0.2
-    "dropout": 0.2, # 0.0
+    "train_fraction": 0.5,
+    "validation_fraction": 0.25,
+    "test_fraction": 0.25,
+    "dropout": 0.0,
     "weight_decay": 1e-5,
-    "hidden_dim": 512, # 32
+    "hidden_dim": 512,
     "hidden_layers": None,
-    "num_layers": 5, # 3
+    "num_layers": 5,
     "batch_size": 64,
     "layer_type": "GCN",
     "num_relations": 1
