@@ -1,5 +1,5 @@
 from attrdict import AttrDict
-from torch_geometric.datasets import WebKB, WikipediaNetwork, Actor, Planetoid
+from torch_geometric.datasets import WebKB, WikipediaNetwork, Actor, Planetoid, HeterophilousGraphDataset
 from torch_geometric.utils import to_networkx, from_networkx, to_undirected
 from torch_geometric.transforms import LargestConnectedComponents, ToUndirected
 from experiments.node_classification import Experiment
@@ -20,8 +20,8 @@ from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatu
 # transform = T.AddRandomWalkPE(walk_length=16)
 # print("Encoding Random Walk PE")
 
-transform = T.AddLaplacianEigenvectorPE(k=8)
-print("Encoding Laplacian Eigenvector PE")
+# transform = T.AddLaplacianEigenvectorPE(k=8)
+# print("Encoding Laplacian Eigenvector PE")
 
 # transform = T.RootedRWSubgraph(walk_length=10)
 # print("Encoding Rooted RW Subgraph")
@@ -39,15 +39,23 @@ print("Encoding Laplacian Eigenvector PE")
 
 
 largest_cc = LargestConnectedComponents()
-cornell = WebKB(root="data", name="Cornell", transform=transform)
-wisconsin = WebKB(root="data", name="Wisconsin", transform=transform)
-texas = WebKB(root="data", name="Texas", transform=transform)
-#chameleon = WikipediaNetwork(root="data", name="chameleon", transform=transform)
-#cora = Planetoid(root="data", name="cora", transform=transform)
-#citeseer = Planetoid(root="data", name="citeseer", transform=transform)
+# cornell = WebKB(root="data", name="Cornell", transform=transform)
+# wisconsin = WebKB(root="data", name="Wisconsin", transform=transform)
+# texas = WebKB(root="data", name="Texas", transform=transform)
+# chameleon = WikipediaNetwork(root="data", name="chameleon", transform=transform)
+# cora = Planetoid(root="data", name="cora", transform=transform)
+# citeseer = Planetoid(root="data", name="citeseer", transform=transform)
+roman_empire = HeterophilousGraphDataset(root="data", name="Roman-empire")
+amazon_ratings = HeterophilousGraphDataset(root="data", name="Amazon-ratings")
+minesweeper = HeterophilousGraphDataset(root="data", name="Minesweeper")
+tolokers = HeterophilousGraphDataset(root="data", name="Tolokers")
+questions = HeterophilousGraphDataset(root="data", name="Questions")
 
-datasets = {"cornell": cornell, "wisconsin": wisconsin, "texas": texas}
-#            "chameleon": chameleon, "cora": cora, "citeseer": citeseer}
+# datasets = {"cornell": cornell, "wisconsin": wisconsin, "texas": texas, 
+            #"chameleon": chameleon, "cora": cora, "citeseer": citeseer}
+
+datasets = {"roman-empire": roman_empire, "amazon_ratings": amazon_ratings,
+            "minesweeper": minesweeper, "tolokers": tolokers, "questions": questions}
 
 for key in datasets:
     dataset = datasets[key]
