@@ -1,6 +1,6 @@
 from attrdict import AttrDict
 from torch_geometric.datasets import WebKB, WikipediaNetwork, Actor, Planetoid, HeterophilousGraphDataset
-from torch_geometric.utils import to_networkx, from_networkx, to_undirected
+from torch_geometric.utils import to_networkx, from_networkx, to_undirected, dropout_edge
 from torch_geometric.transforms import LargestConnectedComponents, ToUndirected
 from experiments.node_classification import Experiment
 
@@ -101,7 +101,7 @@ for key in datasets:
     print(f"TESTING: {key} ({args.rewiring})")
     dataset = datasets[key]
 
-    """
+    
     start = time.time()
     if args.rewiring == "fosr":
         edge_index, edge_type, _ = fosr.edge_rewire(dataset.data.edge_index.numpy(), num_iterations=args.num_iterations)
@@ -155,9 +155,16 @@ for key in datasets:
         curvature_type = "orc"
         dataset.data.edge_index, dataset.data.edge_type = sdrf.sdrf(dataset.data, loops=args.num_iterations, remove_edges=False, 
                 is_undirected=True, curvature=curvature_type)
+        
+    elif args.rewiring == "dropedge":
+        p = 0.1
+        print(f"[INFO] Dropping edges with probability {p}")
+        for i in range(len(dataset)):
+            dataset[i].edge_index, dataset[i].edge_type = dropout_edge(dataset[i].edge_index, dataset[i].edge_type, p=p, force_undirected=True)
+
     end = time.time()
     rewiring_duration = end - start
-    """
+    
 
     # print(rewiring.spectral_gap(to_networkx(dataset.data, to_undirected=True)))
     start = time.time()
