@@ -23,9 +23,9 @@ default_args = AttrDict(
     "test_fraction": 0.25,
     "dropout": 0.0,
     "weight_decay": 1e-5,
-    "hidden_dim": 512,
+    "hidden_dim": 128,
     "hidden_layers": None,
-    "num_layers": 5,
+    "num_layers": 2,
     "batch_size": 64,
     "layer_type": "GCN",
     "num_relations": 1

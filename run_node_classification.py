@@ -43,19 +43,21 @@ largest_cc = LargestConnectedComponents()
 # wisconsin = WebKB(root="data", name="Wisconsin", transform=transform)
 # texas = WebKB(root="data", name="Texas", transform=transform)
 # chameleon = WikipediaNetwork(root="data", name="chameleon", transform=transform)
-# cora = Planetoid(root="data", name="cora", transform=transform)
-# citeseer = Planetoid(root="data", name="citeseer", transform=transform)
-roman_empire = HeterophilousGraphDataset(root="data", name="Roman-empire")
-amazon_ratings = HeterophilousGraphDataset(root="data", name="Amazon-ratings")
-minesweeper = HeterophilousGraphDataset(root="data", name="Minesweeper")
-tolokers = HeterophilousGraphDataset(root="data", name="Tolokers")
-questions = HeterophilousGraphDataset(root="data", name="Questions")
+cora = Planetoid(root="data", name="cora")
+citeseer = Planetoid(root="data", name="citeseer")
+# roman_empire = HeterophilousGraphDataset(root="data", name="Roman-empire")
+# amazon_ratings = HeterophilousGraphDataset(root="data", name="Amazon-ratings")
+# minesweeper = HeterophilousGraphDataset(root="data", name="Minesweeper")
+# tolokers = HeterophilousGraphDataset(root="data", name="Tolokers")
+# questions = HeterophilousGraphDataset(root="data", name="Questions")
+
+datasets = {"cora": cora, "citeseer": citeseer}
 
 # datasets = {"cornell": cornell, "wisconsin": wisconsin, "texas": texas, 
             #"chameleon": chameleon, "cora": cora, "citeseer": citeseer}
 
-datasets = {"roman-empire": roman_empire, "amazon_ratings": amazon_ratings,
-            "minesweeper": minesweeper, "tolokers": tolokers, "questions": questions}
+# datasets = {"roman-empire": roman_empire, "amazon_ratings": amazon_ratings,
+            #"minesweeper": minesweeper, "tolokers": tolokers, "questions": questions}
 
 for key in datasets:
     dataset = datasets[key]
@@ -69,8 +71,8 @@ def log_to_file(message, filename="results/node_classification.txt"):
 
 default_args = AttrDict({
     "dropout": 0.2,
-    "num_layers": 5,
-    "hidden_dim": 512,
+    "num_layers": 2,
+    "hidden_dim": 128,
     "learning_rate": 1e-3,
     "layer_type": "R-GCN",
     "display": True,
