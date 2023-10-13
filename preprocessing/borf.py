@@ -377,17 +377,17 @@ def borf3(data, loops=10, remove_edges=True, removal_bound=0.5, tau=1,
         mean1, std1, mean2, std2 = _find_threshold(np.array(_C))[1:]
 
         if mean1 > mean2:
-            upper_bound = mean1 + std1
+            upper_bound = mean1 #+ std1
         else:
-            upper_bound = mean2 + std2
+            upper_bound = mean2 #+ std2
 
         # Get top positive curved edges
         most_pos_edges = [edge for edge in _C if orc.G[edge[0]][edge[1]]['ricciCurvature']['rc_curvature'] > upper_bound]
         # most_pos_edges = _C[-batch_remove:]
 
         # get all edges with negative curvature
-        most_neg_edges = [edge for edge in _C if orc.G[edge[0]][edge[1]]['ricciCurvature']['rc_curvature'] < 0]
-        # most_neg_edges = _C[:batch_add]
+        # most_neg_edges = [edge for edge in _C if orc.G[edge[0]][edge[1]]['ricciCurvature']['rc_curvature'] < 0]
+        most_neg_edges = _C[:batch_add]
 
         # if there are no edges with negative curvature, stop
         if most_neg_edges == []:
