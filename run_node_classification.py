@@ -71,7 +71,7 @@ def log_to_file(message, filename="results/node_classification.txt"):
 
 default_args = AttrDict({
     "dropout": 0.2,
-    "num_layers": 16,
+    "num_layers": 8,
     "hidden_dim": 128,
     "learning_rate": 1e-3,
     "layer_type": "R-GCN",
@@ -159,7 +159,7 @@ for key in datasets:
                 is_undirected=True, curvature=curvature_type)
         
     elif args.rewiring == "dropedge":
-        p = 0.1
+        p = 0.8
         print(f"[INFO] Dropping edges with probability {p}")
         for i in range(len(dataset)):
             dataset[i].edge_index, dataset[i].edge_type = dropout_edge(dataset[i].edge_index, dataset[i].edge_type, p=p, force_undirected=True)
