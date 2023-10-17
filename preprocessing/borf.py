@@ -407,6 +407,7 @@ def borf3(data, loops=10, remove_edges=True, removal_bound=0.5, tau=1,
             for (u, v) in most_pos_edges:
                 if(G.has_edge(u, v)):
                     G.remove_edge(u, v)
+                    print("Removed edge: ", u, v)
 
 
     edge_index = from_networkx(G).edge_index
