@@ -42,22 +42,21 @@ largest_cc = LargestConnectedComponents()
 # cornell = WebKB(root="data", name="Cornell", transform=transform)
 # wisconsin = WebKB(root="data", name="Wisconsin", transform=transform)
 # texas = WebKB(root="data", name="Texas", transform=transform)
-chameleon = WikipediaNetwork(root="data", name="chameleon")
-cora = Planetoid(root="data", name="cora")
-citeseer = Planetoid(root="data", name="citeseer")
+# chameleon = WikipediaNetwork(root="data", name="chameleon")
+# cora = Planetoid(root="data", name="cora")
+# citeseer = Planetoid(root="data", name="citeseer")
 # roman_empire = HeterophilousGraphDataset(root="data", name="Roman-empire")
-# amazon_ratings = HeterophilousGraphDataset(root="data", name="Amazon-ratings")
-# minesweeper = HeterophilousGraphDataset(root="data", name="Minesweeper")
-# tolokers = HeterophilousGraphDataset(root="data", name="Tolokers")
+amazon_ratings = HeterophilousGraphDataset(root="data", name="Amazon-ratings")
+minesweeper = HeterophilousGraphDataset(root="data", name="Minesweeper")
+tolokers = HeterophilousGraphDataset(root="data", name="Tolokers")
 # questions = HeterophilousGraphDataset(root="data", name="Questions")
 
-datasets = {"cora": cora, "citeseer": citeseer, "chameleon": chameleon}
+# datasets = {"cora": cora, "citeseer": citeseer, "chameleon": chameleon}
 
 # datasets = {"cornell": cornell, "wisconsin": wisconsin, "texas": texas, 
             #"chameleon": chameleon, "cora": cora, "citeseer": citeseer}
 
-# datasets = {"roman-empire": roman_empire, "amazon_ratings": amazon_ratings,
-            #"minesweeper": minesweeper, "tolokers": tolokers, "questions": questions}
+datasets = {"amazon_ratings": amazon_ratings, "minesweeper": minesweeper, "tolokers": tolokers}
 
 for key in datasets:
     dataset = datasets[key]
