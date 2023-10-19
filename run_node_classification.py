@@ -42,7 +42,7 @@ largest_cc = LargestConnectedComponents()
 # cornell = WebKB(root="data", name="Cornell", transform=transform)
 # wisconsin = WebKB(root="data", name="Wisconsin", transform=transform)
 # texas = WebKB(root="data", name="Texas", transform=transform)
-# chameleon = WikipediaNetwork(root="data", name="chameleon", transform=transform)
+chameleon = WikipediaNetwork(root="data", name="chameleon")
 cora = Planetoid(root="data", name="cora")
 citeseer = Planetoid(root="data", name="citeseer")
 # roman_empire = HeterophilousGraphDataset(root="data", name="Roman-empire")
@@ -51,7 +51,7 @@ citeseer = Planetoid(root="data", name="citeseer")
 # tolokers = HeterophilousGraphDataset(root="data", name="Tolokers")
 # questions = HeterophilousGraphDataset(root="data", name="Questions")
 
-datasets = {"cora": cora, "citeseer": citeseer}
+datasets = {"cora": cora, "citeseer": citeseer, "chameleon": chameleon}
 
 # datasets = {"cornell": cornell, "wisconsin": wisconsin, "texas": texas, 
             #"chameleon": chameleon, "cora": cora, "citeseer": citeseer}
@@ -166,8 +166,9 @@ for key in datasets:
 
     end = time.time()
     rewiring_duration = end - start
+    print(f"Rewiring duration: {rewiring_duration}")
     
-
+    """
     # print(rewiring.spectral_gap(to_networkx(dataset.data, to_undirected=True)))
     start = time.time()
     for trial in range(args.num_trials):
@@ -198,3 +199,4 @@ for key in datasets:
     results_df = pd.DataFrame(results)
     with open(f'results/node_classification_{args.layer_type}_{args.rewiring}.csv', 'a') as f:
         results_df.to_csv(f, mode='a', header=f.tell()==0)
+    """
