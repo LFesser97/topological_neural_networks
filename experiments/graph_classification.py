@@ -99,7 +99,9 @@ class Experiment:
                 y = graph.y.to(self.args.device)
 
                 out = self.model(graph)
-                print(out)
+
+                """ CHANGED THIS """
+                print("Line 104: ", out)
                 print(y)
                 loss = self.loss_fn(input=out, target=y)
                 total_loss += loss
