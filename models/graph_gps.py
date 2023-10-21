@@ -152,8 +152,8 @@ def train():
         print(type(out.squeeze()))
         print(type(data.y))
 
-        print(type(out.squeeze()[0]))
-        print(type(data.y[0]))
+        print(out.squeeze()[0])
+        print(data.y[0])
 
         loss = torch.nn.CrossEntropyLoss()(out.squeeze(), data.y)
         loss.backward()
