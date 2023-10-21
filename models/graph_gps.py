@@ -3,6 +3,8 @@ import os.path as osp
 from typing import Any, Dict, Optional
 
 import torch
+import torch.nn.functional as F
+
 from torch.nn import (
     BatchNorm1d,
     Embedding,
@@ -155,7 +157,10 @@ def train():
         print(out.squeeze()[0])
         print(data.y[0])
 
-        loss = torch.nn.CrossEntropyLoss()(out.squeeze(), data.y.float())
+        # Convert class labels to one-hot encoding
+        one_hot_y = F.one_hot(data.y, 2).float()
+
+        loss = torch.nn.CrossEntropyLoss()(out.squeeze(), one_hot_y)
         loss.backward()
         total_loss += loss.item() * data.num_graphs
         optimizer.step()
