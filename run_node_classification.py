@@ -97,12 +97,13 @@ if args.dataset:
     name = args.dataset
     datasets = {name: datasets[name]}
 
+
 for key in datasets:
     accuracies = []
     print(f"TESTING: {key} ({args.rewiring})")
     dataset = datasets[key]
 
-    
+    """    
     start = time.time()
     if args.rewiring == "fosr":
         edge_index, edge_type, _ = fosr.edge_rewire(dataset.data.edge_index.numpy(), num_iterations=args.num_iterations)
@@ -165,9 +166,10 @@ for key in datasets:
 
     end = time.time()
     rewiring_duration = end - start
-    print(f"Rewiring duration: {rewiring_duration}")
-    
+    print(f"Rewiring duration: {rewiring_duration}")    
     """
+
+
     # print(rewiring.spectral_gap(to_networkx(dataset.data, to_undirected=True)))
     start = time.time()
     for trial in range(args.num_trials):
@@ -198,4 +200,3 @@ for key in datasets:
     results_df = pd.DataFrame(results)
     with open(f'results/node_classification_{args.layer_type}_{args.rewiring}.csv', 'a') as f:
         results_df.to_csv(f, mode='a', header=f.tell()==0)
-    """
