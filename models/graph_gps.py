@@ -23,11 +23,11 @@ from attention import PerformerAttention
 
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', 'ZINC-PE')
 transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
-# train_dataset = ZINC(path, subset=True, split='train', pre_transform=transform)
-# val_dataset = ZINC(path, subset=True, split='val', pre_transform=transform)
-# test_dataset = ZINC(path, subset=True, split='test', pre_transform=transform)
+train_dataset = ZINC(path, subset=True, split='train', pre_transform=transform)
+val_dataset = ZINC(path, subset=True, split='val', pre_transform=transform)
+test_dataset = ZINC(path, subset=True, split='test', pre_transform=transform)
 
-""" Graph Classification Datasets """
+"""
 
 mutag = list(TUDataset(root="data", name="MUTAG", transform=transform))
 # enzymes = list(TUDataset(root="data", name="ENZYMES"))
@@ -48,7 +48,7 @@ def split_dataset(dataset, train_fraction=0.5, validation_fraction=0.25):
 
 train_dataset, val_dataset, test_dataset = split_dataset(mutag)
 
-""" Original Code """
+"""
 
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=64)
@@ -95,8 +95,10 @@ class GPS(torch.nn.Module):
 
     def forward(self, x, pe, edge_index, edge_attr, batch):
         x_pe = self.pe_norm(pe)
-
-        x = torch.cat((self.node_emb(x.squeeze(-1).long()), self.pe_lin(x_pe).unsqueeze(1)), dim=1)
+        print(self.node_emb(x.squeeze(-1)).shape)
+        print(self.pe_lin(x_pe).shape)
+        
+        x = torch.cat((self.node_emb(x.squeeze(-1)), self.pe_lin(x_pe)), 1)
         edge_attr = self.edge_emb(edge_attr)
 
         for conv in self.convs:
@@ -168,7 +170,7 @@ def test(loader):
     return total_error / len(loader.dataset)
 
 
-for epoch in range(1, 11):
+for epoch in range(1, 5):
     loss = train()
     val_mae = test(val_loader)
     test_mae = test(test_loader)
