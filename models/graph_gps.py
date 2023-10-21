@@ -157,10 +157,7 @@ def train():
         print(out.squeeze()[0])
         print(data.y[0])
 
-        # Convert class labels to one-hot encoding
-        one_hot_y = F.one_hot(data.y, 2).float()
-
-        loss = torch.nn.CrossEntropyLoss()(out.squeeze(), one_hot_y)
+        loss = torch.nn.CrossEntropyLoss()(out.squeeze(), data.y)
         loss.backward()
         total_loss += loss.item() * data.num_graphs
         optimizer.step()
