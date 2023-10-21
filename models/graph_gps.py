@@ -29,7 +29,7 @@ transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
 
 """ Graph Classification Datasets """
 
-mutag = list(TUDataset(root="data", name="MUTAG"))
+mutag = list(TUDataset(root="data", name="MUTAG", pre_transform=transform))
 # enzymes = list(TUDataset(root="data", name="ENZYMES"))
 # proteins = list(TUDataset(root="data", name="PROTEINS"))
 # imdb = list(TUDataset(root="data", name="IMDB-BINARY"))
