@@ -101,10 +101,10 @@ class GPS(torch.nn.Module):
         # print(self.pe_lin(x_pe).shape)
 
         x = torch.cat((self.node_emb(x.squeeze(-1)), self.pe_lin(x_pe)), 1)
-        edge_attr = self.edge_emb(edge_attr)
+        # edge_attr = self.edge_emb(edge_attr)
 
         for conv in self.convs:
-            x = conv(x, edge_index, batch, edge_attr=edge_attr)
+            x = conv(x, edge_index, batch) #, edge_attr=edge_attr)
         x = global_add_pool(x, batch)
         return self.mlp(x)
 
