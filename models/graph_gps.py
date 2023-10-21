@@ -23,11 +23,11 @@ from attention import PerformerAttention
 
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', 'ZINC-PE')
 transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
-train_dataset = ZINC(path, subset=True, split='train', pre_transform=transform)
-val_dataset = ZINC(path, subset=True, split='val', pre_transform=transform)
-test_dataset = ZINC(path, subset=True, split='test', pre_transform=transform)
+# train_dataset = ZINC(path, subset=True, split='train', pre_transform=transform)
+# val_dataset = ZINC(path, subset=True, split='val', pre_transform=transform)
+# test_dataset = ZINC(path, subset=True, split='test', pre_transform=transform)
 
-"""
+""" New Code """
 
 mutag = list(TUDataset(root="data", name="MUTAG", transform=transform))
 # enzymes = list(TUDataset(root="data", name="ENZYMES"))
@@ -48,7 +48,7 @@ def split_dataset(dataset, train_fraction=0.5, validation_fraction=0.25):
 
 train_dataset, val_dataset, test_dataset = split_dataset(mutag)
 
-"""
+""" Original Code """
 
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=64)
