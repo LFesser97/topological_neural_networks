@@ -95,7 +95,7 @@ class GPS(torch.nn.Module):
 
     def forward(self, x, pe, edge_index, edge_attr, batch):
         x_pe = self.pe_norm(pe)
-        x = torch.cat((self.node_emb(x.squeeze(-1)), self.pe_lin(x_pe)), 1)
+        x = torch.cat((self.node_emb(x.squeeze(-1).long()), self.pe_lin(x_pe)), 1)
         edge_attr = self.edge_emb(edge_attr)
 
         for conv in self.convs:
