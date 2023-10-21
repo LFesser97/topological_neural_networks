@@ -27,7 +27,7 @@ class GCN(torch.nn.Module):
         self.args = args
         self.num_relations = args.num_relations
         self.layer_type = args.layer_type
-        num_features = [args.input_dim - 5] + list(args.hidden_layers) + [args.output_dim]
+        num_features = [args.input_dim - 2] + list(args.hidden_layers) + [args.output_dim]
         self.num_layers = len(num_features) - 1
         layers = []
         for i, (in_features, out_features) in enumerate(zip(num_features[:-1], num_features[1:])):
