@@ -155,7 +155,7 @@ def train():
         print(out.squeeze()[0])
         print(data.y[0])
 
-        loss = torch.nn.CrossEntropyLoss()(out.squeeze(), data.y)
+        loss = torch.nn.CrossEntropyLoss()(out.squeeze(), data.y.long())
         loss.backward()
         total_loss += loss.item() * data.num_graphs
         optimizer.step()
