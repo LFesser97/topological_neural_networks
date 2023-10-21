@@ -43,15 +43,15 @@ largest_cc = LargestConnectedComponents()
 # wisconsin = WebKB(root="data", name="Wisconsin", transform=transform)
 # texas = WebKB(root="data", name="Texas", transform=transform)
 # chameleon = WikipediaNetwork(root="data", name="chameleon")
-cora = Planetoid(root="data", name="cora", transform=transform)
+# cora = Planetoid(root="data", name="cora", transform=transform)
 # citeseer = Planetoid(root="data", name="citeseer")
 # roman_empire = HeterophilousGraphDataset(root="data", name="Roman-empire")
-# amazon_ratings = HeterophilousGraphDataset(root="data", name="Amazon-ratings", transform=transform)
+amazon_ratings = HeterophilousGraphDataset(root="data", name="Amazon-ratings", transform=transform)
 # minesweeper = HeterophilousGraphDataset(root="data", name="Minesweeper", transform=transform)
 # tolokers = HeterophilousGraphDataset(root="data", name="Tolokers", transform=transform)
 # questions = HeterophilousGraphDataset(root="data", name="Questions")
 
-datasets = {"cora": cora}
+datasets = {"amazon_ratings": amazon_ratings}
 
 # datasets = {"cornell": cornell, "wisconsin": wisconsin, "texas": texas, 
             #"chameleon": chameleon, "cora": cora, "citeseer": citeseer}
