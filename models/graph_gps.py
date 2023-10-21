@@ -149,8 +149,8 @@ def train():
         out = model(data.x, data.pe, data.edge_index, data.edge_attr,
                     data.batch)
         # loss = (out.squeeze() - data.y).abs().mean()
-        print(out.squeeze())
-        print(data.y)
+        print(out.squeeze().shape)
+        print(data.y.shape)
 
         loss = torch.nn.CrossEntropyLoss()(out.squeeze(), data.y)
         loss.backward()
