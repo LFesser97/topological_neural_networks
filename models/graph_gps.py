@@ -13,17 +13,42 @@ from torch.nn import (
 )
 from torch.optim.lr_scheduler import ReduceLROnPlateau
 
+from torch.utils.data import random_split
+
 import torch_geometric.transforms as T
-from torch_geometric.datasets import ZINC
+from torch_geometric.datasets import ZINC, TUDataset
 from torch_geometric.loader import DataLoader
 from torch_geometric.nn import GINEConv, GPSConv, global_add_pool
 from attention import PerformerAttention
 
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', 'ZINC-PE')
 transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
-train_dataset = ZINC(path, subset=True, split='train', pre_transform=transform)
-val_dataset = ZINC(path, subset=True, split='val', pre_transform=transform)
-test_dataset = ZINC(path, subset=True, split='test', pre_transform=transform)
+# train_dataset = ZINC(path, subset=True, split='train', pre_transform=transform)
+# val_dataset = ZINC(path, subset=True, split='val', pre_transform=transform)
+# test_dataset = ZINC(path, subset=True, split='test', pre_transform=transform)
+
+""" Graph Classification Datasets """
+
+mutag = list(TUDataset(root="data", name="MUTAG"))
+# enzymes = list(TUDataset(root="data", name="ENZYMES"))
+# proteins = list(TUDataset(root="data", name="PROTEINS"))
+# imdb = list(TUDataset(root="data", name="IMDB-BINARY"))
+
+# split the dataset into train, validation and test
+
+def split_dataset(dataset, train_fraction=0.5, validation_fraction=0.25):
+    dataset_size = len(dataset)
+    train_size = int(train_fraction * dataset_size)
+    validation_size = int(validation_fraction * dataset_size)
+    test_size = dataset_size - train_size - validation_size
+    train_dataset, validation_dataset, test_dataset = random_split(dataset,[train_size, validation_size, test_size])
+
+    return train_dataset, validation_dataset, test_dataset
+
+
+train_dataset, val_dataset, test_dataset = split_dataset(mutag)
+
+""" Original Code """
 
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=64)
@@ -120,7 +145,8 @@ def train():
         model.redraw_projection.redraw_projections()
         out = model(data.x, data.pe, data.edge_index, data.edge_attr,
                     data.batch)
-        loss = (out.squeeze() - data.y).abs().mean()
+        # loss = (out.squeeze() - data.y).abs().mean()
+        loss = torch.nn.CrossEntropyLoss()(out.squeeze(), data.y)
         loss.backward()
         total_loss += loss.item() * data.num_graphs
         optimizer.step()
@@ -136,7 +162,8 @@ def test(loader):
         data = data.to(device)
         out = model(data.x, data.pe, data.edge_index, data.edge_attr,
                     data.batch)
-        total_error += (out.squeeze() - data.y).abs().sum().item()
+        # total_error += (out.squeeze() - data.y).abs().sum().item()
+        total_error += torch.nn.CrossEntropyLoss()(out.squeeze(), data.y)
     return total_error / len(loader.dataset)
 
 
