@@ -67,7 +67,7 @@ class GPS(torch.nn.Module):
         super().__init__()
 
         # self.node_emb = Embedding(28, channels - pe_dim)
-        self.node_emb = Linear(28, channels - pe_dim)
+        self.node_emb = Linear(7, channels - pe_dim)
         self.pe_lin = Linear(20, pe_dim)
         self.pe_norm = BatchNorm1d(20)
         self.edge_emb = Embedding(4, channels)
