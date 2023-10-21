@@ -150,7 +150,7 @@ def train():
                     data.batch)
         # loss = (out.squeeze() - data.y).abs().mean()
         print(type(out.squeeze()))
-        print(type(data.y.shape))
+        print(type(data.y))
 
         print(type(out.squeeze()[0]))
         print(type(data.y[0]))
