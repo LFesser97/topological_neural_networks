@@ -47,11 +47,11 @@ largest_cc = LargestConnectedComponents()
 # citeseer = Planetoid(root="data", name="citeseer")
 # roman_empire = HeterophilousGraphDataset(root="data", name="Roman-empire")
 amazon_ratings = HeterophilousGraphDataset(root="data", name="Amazon-ratings", transform=transform)
-# minesweeper = HeterophilousGraphDataset(root="data", name="Minesweeper", transform=transform)
-# tolokers = HeterophilousGraphDataset(root="data", name="Tolokers", transform=transform)
+minesweeper = HeterophilousGraphDataset(root="data", name="Minesweeper", transform=transform)
+tolokers = HeterophilousGraphDataset(root="data", name="Tolokers", transform=transform)
 # questions = HeterophilousGraphDataset(root="data", name="Questions")
 
-datasets = {"amazon_ratings": amazon_ratings}
+datasets = {"amazon_ratings": amazon_ratings, "minesweeper": minesweeper, "tolokers": tolokers}
 
 # datasets = {"cornell": cornell, "wisconsin": wisconsin, "texas": texas, 
             #"chameleon": chameleon, "cora": cora, "citeseer": citeseer}
