@@ -97,9 +97,6 @@ class GPS(torch.nn.Module):
 
     def forward(self, x, pe, edge_index, edge_attr, batch):
         x_pe = self.pe_norm(pe)
-        print(x.squeeze(-1).shape)
-        # print(self.node_emb(x.squeeze(-1)).shape)
-        # print(self.pe_lin(x_pe).shape)
 
         x = torch.cat((self.node_emb(x.squeeze(-1)), self.pe_lin(x_pe)), 1)
         # edge_attr = self.edge_emb(edge_attr)
@@ -152,6 +149,9 @@ def train():
         out = model(data.x, data.pe, data.edge_index, data.edge_attr,
                     data.batch)
         # loss = (out.squeeze() - data.y).abs().mean()
+        print(out.squeeze())
+        print(data.y)
+
         loss = torch.nn.CrossEntropyLoss()(out.squeeze(), data.y)
         loss.backward()
         total_loss += loss.item() * data.num_graphs
