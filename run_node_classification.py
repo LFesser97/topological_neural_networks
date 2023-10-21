@@ -20,8 +20,8 @@ from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatu
 # transform = T.AddRandomWalkPE(walk_length=16)
 # print("Encoding Random Walk PE")
 
-# transform = T.AddLaplacianEigenvectorPE(k=8)
-# print("Encoding Laplacian Eigenvector PE")
+transform = T.AddLaplacianEigenvectorPE(k=8)
+print("Encoding Laplacian Eigenvector PE")
 
 # transform = T.RootedRWSubgraph(walk_length=10)
 # print("Encoding Rooted RW Subgraph")
@@ -46,9 +46,9 @@ largest_cc = LargestConnectedComponents()
 # cora = Planetoid(root="data", name="cora")
 # citeseer = Planetoid(root="data", name="citeseer")
 # roman_empire = HeterophilousGraphDataset(root="data", name="Roman-empire")
-amazon_ratings = HeterophilousGraphDataset(root="data", name="Amazon-ratings")
-minesweeper = HeterophilousGraphDataset(root="data", name="Minesweeper")
-tolokers = HeterophilousGraphDataset(root="data", name="Tolokers")
+amazon_ratings = HeterophilousGraphDataset(root="data", name="Amazon-ratings", transform=transform)
+minesweeper = HeterophilousGraphDataset(root="data", name="Minesweeper", transform=transform)
+tolokers = HeterophilousGraphDataset(root="data", name="Tolokers", transform=transform)
 # questions = HeterophilousGraphDataset(root="data", name="Questions")
 
 # datasets = {"cora": cora, "citeseer": citeseer, "chameleon": chameleon}
