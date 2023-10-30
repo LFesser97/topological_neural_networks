@@ -61,9 +61,9 @@ class GPS(torch.nn.Module):
                 ReLU(),
                 Linear(channels, channels),
             )
-            # conv = GPSConv(channels, GINEConv(nn), heads=4)
+            conv = GPSConv(channels, GINEConv(nn), heads=4)
                            # attn_type=attn_type, attn_kwargs=attn_kwargs)
-            conv = GPSConv(channels, GINConv(nn), heads=4)
+            # conv = GPSConv(channels, GINConv(nn), heads=4)
             self.convs.append(conv)
 
         self.mlp = Sequential(
