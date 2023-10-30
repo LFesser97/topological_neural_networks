@@ -27,7 +27,9 @@ from attention import PerformerAttention
 
 
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', 'ZINC-PE')
-transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
+# transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
+transform = T.AddLaplacianEigenvectorPE(max_freq=8, attr_name='pe')
+
 train_dataset = ZINC(path, subset=True, split='train', pre_transform=transform)
 val_dataset = ZINC(path, subset=True, split='val', pre_transform=transform)
 test_dataset = ZINC(path, subset=True, split='test', pre_transform=transform)
@@ -150,7 +152,7 @@ def test(loader):
     return total_error / len(loader.dataset)
 
 
-for epoch in range(1, 101):
+for epoch in range(1, 201):
     loss = train()
     val_mae = test(val_loader)
     test_mae = test(test_loader)
