@@ -21,36 +21,16 @@ import torch_geometric.transforms as T
 from torch_geometric.datasets import ZINC, TUDataset
 from torch_geometric.loader import DataLoader
 from torch_geometric.nn import GINEConv, GPSConv, global_add_pool, GINConv
+# from torch_geometric.nn.attention import PerformerAttention
+
 from attention import PerformerAttention
+
 
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', 'ZINC-PE')
 transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
-# train_dataset = ZINC(path, subset=True, split='train', pre_transform=transform)
-# val_dataset = ZINC(path, subset=True, split='val', pre_transform=transform)
-# test_dataset = ZINC(path, subset=True, split='test', pre_transform=transform)
-
-""" New Code """
-
-mutag = list(TUDataset(root="data", name="MUTAG", transform=transform))
-# enzymes = list(TUDataset(root="data", name="ENZYMES"))
-# proteins = list(TUDataset(root="data", name="PROTEINS"))
-# imdb = list(TUDataset(root="data", name="IMDB-BINARY"))
-
-# split the dataset into train, validation and test
-
-def split_dataset(dataset, train_fraction=0.5, validation_fraction=0.25):
-    dataset_size = len(dataset)
-    train_size = int(train_fraction * dataset_size)
-    validation_size = int(validation_fraction * dataset_size)
-    test_size = dataset_size - train_size - validation_size
-    train_dataset, validation_dataset, test_dataset = random_split(dataset,[train_size, validation_size, test_size])
-
-    return train_dataset, validation_dataset, test_dataset
-
-
-train_dataset, val_dataset, test_dataset = split_dataset(mutag)
-
-""" Original Code """
+train_dataset = ZINC(path, subset=True, split='train', pre_transform=transform)
+val_dataset = ZINC(path, subset=True, split='val', pre_transform=transform)
+test_dataset = ZINC(path, subset=True, split='test', pre_transform=transform)
 
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=64)
@@ -68,8 +48,7 @@ class GPS(torch.nn.Module):
                  attn_type: str, attn_kwargs: Dict[str, Any]):
         super().__init__()
 
-        # self.node_emb = Embedding(28, channels - pe_dim)
-        self.node_emb = Linear(7, channels - pe_dim)
+        self.node_emb = Embedding(28, channels - pe_dim)
         self.pe_lin = Linear(20, pe_dim)
         self.pe_norm = BatchNorm1d(20)
         self.edge_emb = Embedding(4, channels)
@@ -81,9 +60,8 @@ class GPS(torch.nn.Module):
                 ReLU(),
                 Linear(channels, channels),
             )
-            # conv = GPSConv(channels, GINEConv(nn), heads=4)
-                           # attn_type=attn_type, attn_kwargs=attn_kwargs)
-            conv = GPSConv(channels, GINConv(nn), heads=4)
+            conv = GPSConv(channels, GINEConv(nn), heads=4,
+                           attn_type=attn_type, attn_kwargs=attn_kwargs)
             self.convs.append(conv)
 
         self.mlp = Sequential(
@@ -99,12 +77,11 @@ class GPS(torch.nn.Module):
 
     def forward(self, x, pe, edge_index, edge_attr, batch):
         x_pe = self.pe_norm(pe)
-
         x = torch.cat((self.node_emb(x.squeeze(-1)), self.pe_lin(x_pe)), 1)
-        # edge_attr = self.edge_emb(edge_attr)
+        edge_attr = self.edge_emb(edge_attr)
 
         for conv in self.convs:
-            x = conv(x, edge_index, batch) #, edge_attr=edge_attr)
+            x = conv(x, edge_index, batch, edge_attr=edge_attr)
         x = global_add_pool(x, batch)
         return self.mlp(x)
 
@@ -150,14 +127,7 @@ def train():
         model.redraw_projection.redraw_projections()
         out = model(data.x, data.pe, data.edge_index, data.edge_attr,
                     data.batch)
-        # loss = (out.squeeze() - data.y).abs().mean()
-        print(type(out.squeeze()))
-        print(type(data.y))
-
-        print(out.squeeze()[0])
-        print(data.y[0])
-
-        loss = torch.nn.CrossEntropyLoss()(out.squeeze(), data.y)
+        loss = (out.squeeze() - data.y).abs().mean()
         loss.backward()
         total_loss += loss.item() * data.num_graphs
         optimizer.step()
@@ -173,12 +143,11 @@ def test(loader):
         data = data.to(device)
         out = model(data.x, data.pe, data.edge_index, data.edge_attr,
                     data.batch)
-        # total_error += (out.squeeze() - data.y).abs().sum().item()
-        total_error += torch.nn.CrossEntropyLoss()(out.squeeze(), data.y)
+        total_error += (out.squeeze() - data.y).abs().sum().item()
     return total_error / len(loader.dataset)
 
 
-for epoch in range(1, 5):
+for epoch in range(1, 101):
     loss = train()
     val_mae = test(val_loader)
     test_mae = test(test_loader)
