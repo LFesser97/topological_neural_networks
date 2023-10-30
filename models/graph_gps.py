@@ -32,6 +32,7 @@ train_dataset = ZINC(path, subset=True, split='train', pre_transform=transform)
 val_dataset = ZINC(path, subset=True, split='val', pre_transform=transform)
 test_dataset = ZINC(path, subset=True, split='test', pre_transform=transform)
 
+
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
 val_loader = DataLoader(val_dataset, batch_size=64)
 test_loader = DataLoader(test_dataset, batch_size=64)
@@ -48,7 +49,8 @@ class GPS(torch.nn.Module):
                  attn_type: str, attn_kwargs: Dict[str, Any]):
         super().__init__()
 
-        self.node_emb = Embedding(28, channels - pe_dim)
+        # self.node_emb = Embedding(28, channels - pe_dim)
+        self.node_emb = Linear(7, channels - pe_dim)
         self.pe_lin = Linear(20, pe_dim)
         self.pe_norm = BatchNorm1d(20)
         self.edge_emb = Embedding(4, channels)
@@ -60,8 +62,9 @@ class GPS(torch.nn.Module):
                 ReLU(),
                 Linear(channels, channels),
             )
-            conv = GPSConv(channels, GINEConv(nn), heads=4,
-                           attn_type=attn_type, attn_kwargs=attn_kwargs)
+            # conv = GPSConv(channels, GINEConv(nn), heads=4)
+                           # attn_type=attn_type, attn_kwargs=attn_kwargs)
+            conv = GPSConv(channels, GINConv(nn), heads=4)
             self.convs.append(conv)
 
         self.mlp = Sequential(
@@ -77,6 +80,7 @@ class GPS(torch.nn.Module):
 
     def forward(self, x, pe, edge_index, edge_attr, batch):
         x_pe = self.pe_norm(pe)
+
         x = torch.cat((self.node_emb(x.squeeze(-1)), self.pe_lin(x_pe)), 1)
         edge_attr = self.edge_emb(edge_attr)
 
