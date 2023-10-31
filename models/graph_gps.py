@@ -29,21 +29,75 @@ from custom_encodings import LocalCurvatureProfile
 
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', 'ZINC-PE')
 # transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
-# transform = T.AddLaplacianEigenvectorPE(k=8, attr_name='pe')
+transform = T.AddLaplacianEigenvectorPE(k=8, attr_name='pe')
 # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
 # print("Encoding Rooted RW Subgraph + Random Walk PE")
 
 # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
 # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
-lcp = LocalCurvatureProfile()
-transform = T.compose(T.AddLaplacianEigenvectorPE(k=8), lcp.compute_orc)
-print(f"Encoding Local Curvature Profile (ORC) + Laplacian Eigenvector PE")
-
-
 train_dataset = ZINC(path, subset=True, split='train', pre_transform=transform)
 val_dataset = ZINC(path, subset=True, split='val', pre_transform=transform)
 test_dataset = ZINC(path, subset=True, split='test', pre_transform=transform)
+
+lcp = LocalCurvatureProfile()
+
+# train dataset
+drop_train_graphs = []
+
+for i in range(len(train_dataset)):
+    try:
+        train_dataset[i] = lcp.compute_orc(train_dataset[i])
+
+    except:
+        drop_train_graphs.append(i)
+        print(f"Error in graph {i} in train_dataset")
+
+# print how many graphs are being dropped
+print(f"Number of graphs dropped in train_dataset: {len(drop_train_graphs)}")
+
+# drop the graphs that were dropped in the encoding process
+for i in sorted(drop_train_graphs, reverse=True):
+    drop_train_graphs.pop(i)
+
+
+# val dataset
+drop_val_graphs = []
+
+for i in range(len(val_dataset)):
+    try:
+        val_dataset[i] = lcp.compute_orc(val_dataset[i])
+
+    except:
+        drop_val_graphs.append(i)
+        print(f"Error in graph {i} in val_dataset")
+
+# print how many graphs are being dropped
+print(f"Number of graphs dropped in val_dataset: {len(drop_val_graphs)}")
+
+# drop the graphs that were dropped in the encoding process
+for i in sorted(drop_val_graphs, reverse=True):
+    drop_val_graphs.pop(i)
+
+
+# test dataset
+drop_test_graphs = []
+
+for i in range(len(test_dataset)):
+    try:
+        test_dataset[i] = lcp.compute_orc(test_dataset[i])
+
+    except:
+        drop_test_graphs.append(i)
+        print(f"Error in graph {i} in test_dataset")
+
+
+# print how many graphs are being dropped
+print(f"Number of graphs dropped in test_dataset: {len(drop_test_graphs)}")
+
+# drop the graphs that were dropped in the encoding process
+for i in sorted(drop_test_graphs, reverse=True):
+    drop_test_graphs.pop(i)
 
 
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
