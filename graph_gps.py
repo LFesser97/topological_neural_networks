@@ -46,12 +46,10 @@ lcp = LocalCurvatureProfile()
 drop_train_graphs = []
 
 for i in range(len(train_dataset)):
-    try:
-        train_dataset[i] = lcp.compute_orc(train_dataset[i])
+    train_dataset[i] = lcp.compute_orc_approx(train_dataset[i])
 
-    except:
-        drop_train_graphs.append(i)
-        print(f"Error in graph {i} in train_dataset")
+    drop_train_graphs.append(i)
+    print(f"Error in graph {i} in train_dataset")
 
 # print how many graphs are being dropped
 print(f"Number of graphs dropped in train_dataset: {len(drop_train_graphs)}")
@@ -66,7 +64,7 @@ drop_val_graphs = []
 
 for i in range(len(val_dataset)):
     try:
-        val_dataset[i] = lcp.compute_orc(val_dataset[i])
+        val_dataset[i] = lcp.compute_orc_approx(val_dataset[i])
 
     except:
         drop_val_graphs.append(i)
@@ -85,7 +83,7 @@ drop_test_graphs = []
 
 for i in range(len(test_dataset)):
     try:
-        test_dataset[i] = lcp.compute_orc(test_dataset[i])
+        test_dataset[i] = lcp.compute_orc_approx(test_dataset[i])
 
     except:
         drop_test_graphs.append(i)
