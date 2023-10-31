@@ -28,8 +28,8 @@ from custom_encodings import LocalCurvatureProfile
 
 
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', 'ZINC-PE')
-# transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
-transform = T.AddLaplacianEigenvectorPE(k=8, attr_name='pe')
+transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
+# transform = T.AddLaplacianEigenvectorPE(k=8, attr_name='pe')
 # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
 # print("Encoding Rooted RW Subgraph + Random Walk PE")
 
