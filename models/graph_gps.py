@@ -29,11 +29,11 @@ from attention import PerformerAttention
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', 'ZINC-PE')
 # transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
 # transform = T.AddLaplacianEigenvectorPE(k=8, attr_name='pe')
-# transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
-# print("Encoding Rooted RW Subgraph + Random Walk PE")
+transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
+print("Encoding Rooted RW Subgraph + Random Walk PE")
 
-transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
-print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
+# transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
+# print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
 
 train_dataset = ZINC(path, subset=True, split='train', pre_transform=transform)
@@ -158,7 +158,7 @@ def test(loader):
     return total_error / len(loader.dataset)
 
 
-for epoch in range(1, 300):
+for epoch in range(1, 400):
     loss = train()
     val_mae = test(val_loader)
     test_mae = test(test_loader)
