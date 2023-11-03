@@ -177,7 +177,7 @@ class RedrawProjection:
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 attn_kwargs = {'dropout': 0.5}
-model = GPS(channels=64, pe_dim=8, num_layers=10, attn_type=args.attn_type,
+model = GPS(channels=64, pe_dim=12, num_layers=10, attn_type=args.attn_type,
             attn_kwargs=attn_kwargs).to(device)
 optimizer = torch.optim.Adam(model.parameters(), lr=0.001, weight_decay=1e-5)
 scheduler = ReduceLROnPlateau(optimizer, mode='min', factor=0.5, patience=20,
