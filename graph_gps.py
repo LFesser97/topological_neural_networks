@@ -28,7 +28,7 @@ from custom_encodings import LocalCurvatureProfile
 
 
 path = osp.join(osp.dirname(osp.realpath(__file__)), '..', 'data', 'ZINC-PE')
-transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
+# transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
 # transform = T.AddLaplacianEigenvectorPE(k=8, attr_name='pe')
 # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddRandomWalkPE(walk_length=16)])
 # print("Encoding Rooted RW Subgraph + Random Walk PE")
@@ -36,11 +36,14 @@ transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
 # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
 # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
+lcp = LocalCurvatureProfile()
+transform = T.Compose([T.AddRandomWalkPE(walk_length=20), lcp])
+
 train_dataset = list(ZINC(path, subset=True, split='train', pre_transform=transform))
 val_dataset = list(ZINC(path, subset=True, split='val', pre_transform=transform))
 test_dataset = list(ZINC(path, subset=True, split='test', pre_transform=transform))
 
-lcp = LocalCurvatureProfile()
+
 
 # train dataset
 # drop_train_graphs = []
@@ -189,7 +192,6 @@ def train():
         data = data.to(device)
         optimizer.zero_grad()
         model.redraw_projection.redraw_projections()
-        print(data)
         out = model(data.x, data.pe, data.edge_index, data.edge_attr,
                     data.batch)
         loss = (out.squeeze() - data.y).abs().mean()

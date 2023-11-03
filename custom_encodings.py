@@ -117,7 +117,7 @@ class LocalCurvatureProfile(BaseTransform):
         return data
     
 
-    def compute_orc_approx(self, data: Data) -> Data:
+    def forward(self, data: Data) -> Data: # renamed this forward from compute_orc_approx
         graph = to_networkx(data)
             
         # get the neighbors of each node
