@@ -60,10 +60,10 @@ lcp = LocalCurvatureProfile()
 
 
 # val dataset
-drop_val_graphs = []
+# drop_val_graphs = []
 
-for i in range(len(val_dataset)):
-    val_dataset[i] = lcp.compute_orc_approx(val_dataset[i])
+# for i in range(len(val_dataset)):
+    # val_dataset[i] = lcp.compute_orc_approx(val_dataset[i])
 
     # drop_val_graphs.append(i)
     # print(f"Error in graph {i} in val_dataset")
@@ -77,10 +77,10 @@ for i in range(len(val_dataset)):
 
 
 # test dataset
-drop_test_graphs = []
+# drop_test_graphs = []
 
-for i in range(len(test_dataset)):
-    test_dataset[i] = lcp.compute_orc_approx(test_dataset[i])
+# for i in range(len(test_dataset)):
+    # test_dataset[i] = lcp.compute_orc_approx(test_dataset[i])
 
     # drop_test_graphs.append(i)
     # print(f"Error in graph {i} in test_dataset")
