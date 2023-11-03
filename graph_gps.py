@@ -43,10 +43,10 @@ test_dataset = list(ZINC(path, subset=True, split='test', pre_transform=transfor
 lcp = LocalCurvatureProfile()
 
 # train dataset
-drop_train_graphs = []
+# drop_train_graphs = []
 
-for i in range(len(train_dataset)):
-    train_dataset[i] = lcp.compute_orc_approx(train_dataset[i])
+# for i in range(len(train_dataset)):
+    # train_dataset[i] = lcp.compute_orc_approx(train_dataset[i])
 
     # drop_train_graphs.append(i)
     # print(f"Error in graph {i} in train_dataset")
