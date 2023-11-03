@@ -48,15 +48,15 @@ drop_train_graphs = []
 for i in range(len(train_dataset)):
     train_dataset[i] = lcp.compute_orc_approx(train_dataset[i])
 
-    drop_train_graphs.append(i)
-    print(f"Error in graph {i} in train_dataset")
+    # drop_train_graphs.append(i)
+    # print(f"Error in graph {i} in train_dataset")
 
 # print how many graphs are being dropped
-print(f"Number of graphs dropped in train_dataset: {len(drop_train_graphs)}")
+# print(f"Number of graphs dropped in train_dataset: {len(drop_train_graphs)}")
 
 # drop the graphs that were dropped in the encoding process
-for i in sorted(drop_train_graphs, reverse=True):
-    drop_train_graphs.pop(i)
+# for i in sorted(drop_train_graphs, reverse=True):
+#     drop_train_graphs.pop(i)
 
 
 # val dataset
