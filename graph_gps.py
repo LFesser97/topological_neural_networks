@@ -36,7 +36,7 @@ transform = T.AddRandomWalkPE(walk_length=20, attr_name='pe')
 # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
 # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
-train_dataset = ZINC(path, subset=True, split='train', pre_transform=transform)
+train_dataset = list(ZINC(path, subset=True, split='train', pre_transform=transform))
 val_dataset = ZINC(path, subset=True, split='val', pre_transform=transform)
 test_dataset = ZINC(path, subset=True, split='test', pre_transform=transform)
 
