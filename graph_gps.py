@@ -63,39 +63,35 @@ for i in range(len(train_dataset)):
 drop_val_graphs = []
 
 for i in range(len(val_dataset)):
-    try:
-        val_dataset[i] = lcp.compute_orc_approx(val_dataset[i])
+    val_dataset[i] = lcp.compute_orc_approx(val_dataset[i])
 
-    except:
-        drop_val_graphs.append(i)
-        print(f"Error in graph {i} in val_dataset")
+    # drop_val_graphs.append(i)
+    # print(f"Error in graph {i} in val_dataset")
 
 # print how many graphs are being dropped
-print(f"Number of graphs dropped in val_dataset: {len(drop_val_graphs)}")
+# print(f"Number of graphs dropped in val_dataset: {len(drop_val_graphs)}")
 
 # drop the graphs that were dropped in the encoding process
-for i in sorted(drop_val_graphs, reverse=True):
-    drop_val_graphs.pop(i)
+# for i in sorted(drop_val_graphs, reverse=True):
+#    drop_val_graphs.pop(i)
 
 
 # test dataset
 drop_test_graphs = []
 
 for i in range(len(test_dataset)):
-    try:
-        test_dataset[i] = lcp.compute_orc_approx(test_dataset[i])
+    test_dataset[i] = lcp.compute_orc_approx(test_dataset[i])
 
-    except:
-        drop_test_graphs.append(i)
-        print(f"Error in graph {i} in test_dataset")
+    # drop_test_graphs.append(i)
+    # print(f"Error in graph {i} in test_dataset")
 
 
 # print how many graphs are being dropped
-print(f"Number of graphs dropped in test_dataset: {len(drop_test_graphs)}")
+# print(f"Number of graphs dropped in test_dataset: {len(drop_test_graphs)}")
 
 # drop the graphs that were dropped in the encoding process
-for i in sorted(drop_test_graphs, reverse=True):
-    drop_test_graphs.pop(i)
+# for i in sorted(drop_test_graphs, reverse=True):
+#    drop_test_graphs.pop(i)
 
 
 train_loader = DataLoader(train_dataset, batch_size=32, shuffle=True)
