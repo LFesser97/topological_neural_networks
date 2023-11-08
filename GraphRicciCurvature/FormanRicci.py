@@ -14,7 +14,7 @@ import networkx as nx
 import numpy as np
 import ot
 
-from .util import logger
+# from .util import logger
 
 
 def _compute_afrc_edge(G: nx.Graph, ni: int, nj: int, t_num: int) -> float:
@@ -170,13 +170,13 @@ class FormanRicci:
 
 
         if not nx.get_edge_attributes(self.G, weight):
-            logger.info('Edge weight not found. Set weight to 1.')
+            # logger.info('Edge weight not found. Set weight to 1.')
             for (v1, v2) in self.G.edges():
                 self.G[v1][v2][weight] = 1.0
 
         self_loop_edges = list(nx.selfloop_edges(self.G))
         if self_loop_edges:
-            logger.info('Self-loop edge detected. Removing %d self-loop edges.' % len(self_loop_edges))
+            # logger.info('Self-loop edge detected. Removing %d self-loop edges.' % len(self_loop_edges))
             self.G.remove_edges_from(self_loop_edges)
 
 
