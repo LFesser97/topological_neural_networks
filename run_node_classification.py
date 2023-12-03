@@ -32,14 +32,14 @@ from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatu
 # transform = T.Compose([T.RootedRWSubgraph(walk_length=10), T.AddLaplacianEigenvectorPE(k=8)])
 # print("Encoding Rooted RW Subgraph + Laplacian Eigenvector PE")
 
-# lcp = LocalCurvatureProfile()
-# print(f"Encoding Local Curvature Profile (ORC)")
+lcp = LocalCurvatureProfile()
+print(f"Encoding Local Curvature Profile (ORC)")
 
-# transform = lcp.compute_orc_approx
+transform = lcp.compute_orc_approx
 
 # compute the local degree profile
-transform = T.LocalDegreeProfile()
-print("Encoding Local Degree Profile")
+# transform = T.LocalDegreeProfile()
+# print("Encoding Local Degree Profile")
 
 largest_cc = LargestConnectedComponents()
 cornell = WebKB(root="data", name="Cornell", transform=transform)
