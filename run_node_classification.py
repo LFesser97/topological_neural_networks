@@ -37,15 +37,18 @@ from custom_encodings import ShortestPathGenerator, OneHotEdgeAttr, LocalCurvatu
 
 # transform = lcp.compute_orc_approx
 
+# compute the local degree profile
+transform = T.LocalDegreeProfile()
+print("Encoding Local Degree Profile")
 
 largest_cc = LargestConnectedComponents()
-cornell = WebKB(root="data", name="Cornell")
-wisconsin = WebKB(root="data", name="Wisconsin")
-texas = WebKB(root="data", name="Texas")
-chameleon = WikipediaNetwork(root="data", name="chameleon")
-cora = Planetoid(root="data", name="cora")
-citeseer = Planetoid(root="data", name="citeseer")
-pubmed = Planetoid(root="data", name="pubmed")
+cornell = WebKB(root="data", name="Cornell", transform=transform)
+wisconsin = WebKB(root="data", name="Wisconsin", transform=transform)
+texas = WebKB(root="data", name="Texas", transform=transform)
+chameleon = WikipediaNetwork(root="data", name="chameleon", transform=transform)
+cora = Planetoid(root="data", name="cora", transform=transform)
+citeseer = Planetoid(root="data", name="citeseer", transform=transform)
+pubmed = Planetoid(root="data", name="pubmed", transform=transform)
 # roman_empire = HeterophilousGraphDataset(root="data", name="Roman-empire")
 # amazon_ratings = HeterophilousGraphDataset(root="data", name="Amazon-ratings", transform=transform)
 # minesweeper = HeterophilousGraphDataset(root="data", name="Minesweeper", transform=transform)
