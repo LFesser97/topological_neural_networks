@@ -151,6 +151,10 @@ class LocalCurvatureProfile(BaseTransform):
         # add the local degree profile positional encoding to the data object
         if data.x is not None:
             data.x = data.x.view(-1, 1) if data.x.dim() == 1 else data.x
+
+            # make sure the local curvature profile positional encoding is on the same device as the node features
+            if data.x.device != lcp_pe.device:
+                lcp_pe = lcp_pe.to(data.x.device)
             data.x = torch.cat((data.x, lcp_pe), dim=-1)
         else:
             data.x = torch.cat(lcp_pe, dim=-1)
