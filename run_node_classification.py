@@ -78,7 +78,7 @@ default_args = AttrDict({
     "learning_rate": 1e-3,
     "layer_type": "R-GCN",
     "display": True,
-    "num_trials": 1,
+    "num_trials": 10,
     "eval_every": 1,
     "rewiring": "fosr",
     "num_iterations": 50,
